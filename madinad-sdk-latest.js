@@ -213,8 +213,6 @@ var madinadSDK = {
             var node = document.getElementById('madinad_banner_image');
             document.body.style.marginBottom = node.height + 'px';
         });
-
-        //anim('madinad_banner',{ opacity: 1 }, 0.3);
     },
 
     render_interstitial: function(offer_data,base_url){
@@ -260,30 +258,6 @@ var madinadSDK = {
     _remove_node: function(id) {
         if(document.getElementById(id))
             document.getElementById(id).parentNode.removeChild(document.getElementById(id));
-    },
-
-    set_new_offers_count: function() {
-        //if (madinadSDK.is_inbox_visible) return;
-        var elem_tmp = document.getElementById("unread_offers");
-        if (document.getElementById("unread_offers")){
-            elem_tmp.parentNode.removeChild(elem_tmp);
-        }
-        var badge = document.createElement('div');
-        badge.id = "unread_offers";
-        badge.className = "madinad-badge";
-        badge.innerHTML = madinadSDK.unread_offers;
-        document.getElementById("madinad_inbox").appendChild(badge);
-    },
-
-    calculate_unread_offers: function(){
-        var unread_offers = 0;
-        var offers = JSON.parse(madinadSDK.get_cookie("track_mdnd"));
-        for (var i=0; i < madinadSDK.offers_data.c.length; i++) {
-            if(!offers[madinadSDK.offers_data.c[i].cid]){
-                unread_offers += 1;
-            }
-        }
-        madinadSDK.unread_offers = unread_offers;
     },
 
     read_offer: function(cid){
