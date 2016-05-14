@@ -16,6 +16,7 @@ var madinadSDK = {
         "_base_url": "http://ads.madinad.com", // production
         "app_uuid": "app_uuid", // will be updated with application id
 
+        "find_position": false, // true || false >> used in geo-location features
         "polling_interval": 30000,
         "cookie_lifetime": 30, // default cookie lifetime (days)
 
@@ -220,7 +221,7 @@ var madinadSDK = {
     render_interstitial: function(offer_data,base_url){
         var tmp_offer = offer_data;
         var modal_tmp = document.getElementById("madinad_modal");
-        if (modal_tmp != null){ // if a modal exists, move to the next one
+        if (modal_tmp != null){ // if a modal exists remove it to show the other one
             madinadSDK._remove_node("madinad_modal");
         }
         madinadSDK.create_modal(base_url + tmp_offer.cid+"/index.html");
@@ -262,8 +263,7 @@ var madinadSDK = {
             document.getElementById(id).parentNode.removeChild(document.getElementById(id));
     },
 
-    set_new_offers_count: function() {
-        //if (madinadSDK.is_inbox_visible) return;
+    ads_count: function() {
         var elem_tmp = document.getElementById("unread_offers");
         if (document.getElementById("unread_offers")){
             elem_tmp.parentNode.removeChild(elem_tmp);
@@ -275,7 +275,7 @@ var madinadSDK = {
         document.getElementById("madinad_inbox").appendChild(badge);
     },
 
-    calculate_unread_offers: function(){
+    calculate_unread_ads: function(){
         var unread_offers = 0;
         var offers = JSON.parse(madinadSDK.get_cookie("track_mdnd"));
         for (var i=0; i < madinadSDK.offers_data.c.length; i++) {
