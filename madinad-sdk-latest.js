@@ -104,12 +104,10 @@ var madinadSDK = {
                     madinadSDK.properties.app_uuid = ss.substring(ss.indexOf("?a=")+3,ss.indexOf("&fp="));
                 }
 
-                madinadSDK.properties.find_position = ss.substring(ss.indexOf("&fp=")+4,ss.length);
-                madinadSDK.properties.find_position = (madinadSDK.properties.find_position == "true");//convert string to boolean
             }
         }
-        var check_pos = false;//use it to handle timeout of navigator.geolocation (android devices problem and not only)
-        if (this.properties.find_position && navigator.geolocation) { // try go over asynch location calls
+        var check_pos = false;
+        if (this.properties.find_position && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position){
                 check_pos = true;
                 madinadSDK.coords = position.coords || position.coordinate || position;
@@ -123,7 +121,7 @@ var madinadSDK = {
             this.communicate();
         }
 
-        if (check_pos==false){ //if everything fails end up here
+        if (check_pos==false){
             madinadSDK.communicate();
         }
 
