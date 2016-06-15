@@ -77,6 +77,9 @@ var madinadSDK = {
         if ( campaign.i ) {
             type = campaign.b ? 3 : 2;
         }
+        else if ( campaign.hp ){
+            type = 4;
+        }
         else {
             type = 1;
         }
@@ -166,7 +169,7 @@ var madinadSDK = {
             return;
         }
 
-        madinadSDK.offers_data = campaigns_data;
+        madinadSDK.campaigns_data = campaigns_data;
         madinadSDK.properties.cookie_lifetime = currentCampaign.c_lifetime || 1;
 
         campaignType = madinadSDK.getCampaignType(currentCampaign);
@@ -246,7 +249,7 @@ var madinadSDK = {
 
     post_display_analytics: function(){
         var data=[];
-        var tmp_offers = madinadSDK.offers_data.c;
+        var tmp_offers = madinadSDK.campaigns_data.c;
         for (var i=0; i<tmp_offers.length;i++){
             data[i] = {
                 "cid": tmp_offers[i].cid,
