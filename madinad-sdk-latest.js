@@ -1,5 +1,5 @@
 // MadInAd SDK
-// V1
+// V1.2
 
 //https://github.com/relay/anim
 var anim=function(h){h=function(a,e,f,b){var g,d,c=[],j=function(a){if(a=c.shift())a[1]?h.apply(this,a).anim(j):0<a[0]?setTimeout(j,1E3*a[0]):(a[0](),j())};a.charAt&&(a=document.getElementById(a));if(0<a||!a)e={},f=0,j(c=[[a||0]]);q(e,{padding:0,margin:0,border:"Width"},[l,m,n,p]);q(e,{borderRadius:"Radius"},[l+p,l+m,n+m,n+p]);++r;for(g in e)d=e[g],!d.to&&0!==d.to&&(d=e[g]={to:d}),h.defs(d,a,g,b);h.iter(e,1E3*f,j);return{anim:function(){c.push([].slice.call(arguments));return this}}};var l="Top", m="Right",n="Bottom",p="Left",r=1,q=function(a,e,f,b,g,d,c){for(b in a)if(b in e){c=a[b];for(g=0;d=f[g];g++)a[b.replace(e[b],"")+d+(e[b]||"")]={to:0===c.to?c.to:c.to||c,fr:c.fr,e:c.e};delete a[b]}},s=function(w,a){return w["webkitR"+a]||w["mozR"+a]||w["msR"+a]||w["r"+a]||w["oR"+a]}(window,"equestAnimationFrame");h.defs=function(a,e,f,b,g){g=e.style;a.a=f;a.n=e;a.s=f in g?g:e;a.e=a.e||b;a.fr=a.fr||(0===a.fr?0:a.s==e?e[f]:(window.getComputedStyle?getComputedStyle(e, null):e.currentStyle)[f]);a.u=(/\d(\D+)$/.exec(a.to)||/\d(\D+)$/.exec(a.fr)||[0,0])[1];a.fn=/color/i.test(f)?h.fx.color:h.fx[f]||h.fx._;a.mx="anim_"+f;e[a.mx]=a.mxv=r;e[a.mx]!=a.mxv&&(a.mxv=null)};h.iter=function(a,e,f){var b,g,d,c,h,k=+new Date+e;b=function(l){g=k-(l||(new Date).getTime());if(50>g){for(d in a)d=a[d],d.p=1,d.fn(d,d.n,d.to,d.fr,d.a,d.e);f&&f()}else{g/=e;for(d in a){d=a[d];if(d.n[d.mx]!=d.mxv)return;h=d.e;c=g;"lin"==h?c=1-c:"ease"==h?(c=2*(0.5-c),c=1-(c*c*c-3*c+2)/4):"ease-in"==h?(c= 1-c,c*=c*c):c=1-c*c*c;d.p=c;d.fn(d,d.n,d.to,d.fr,d.a,d.e)}s?s(b):setTimeout(b,20,0)}};b()};h.fx={_:function(a,e,f,b,g){b=parseFloat(b)||0;f=parseFloat(f)||0;a.s[g]=(1<=a.p?f:a.p*(f-b)+b)+a.u},width:function(a,e,f,b,g,d){0<=a._fr||(a._fr=!isNaN(b=parseFloat(b))?b:"width"==g?e.clientWidth:e.clientHeight);h.fx._(a,e,f,a._fr,g,d)},opacity:function(a,e,f,b,g){if(isNaN(b=b||a._fr))b=e.style,b.zoom=1,b=a._fr=(/alpha\(opacity=(\d+)\b/i.exec(b.filter)||{})[1]/100||1;b*=1;f=a.p*(f-b)+b;e=e.style;g in e?e[g]= f:e.filter=1<=f?"":"alpha("+g+"="+Math.round(100*f)+")"},color:function(a,e,f,b,g,d,c,j){a.ok||(f=a.to=h.toRGBA(f),b=a.fr=h.toRGBA(b),0==f[3]&&(f=[].concat(b),f[3]=0),0==b[3]&&(b=[].concat(f),b[3]=0),a.ok=1);j=[0,0,0,a.p*(f[3]-b[3])+1*b[3]];for(c=2;0<=c;c--)j[c]=Math.round(a.p*(f[c]-b[c])+1*b[c]);(1<=j[3]||h.rgbaIE)&&j.pop();try{a.s[g]=(3<j.length?"rgba(":"rgb(")+j.join(",")+")"}catch(k){h.rgbaIE=1}}};h.fx.height=h.fx.width;h.RGBA=/#(.)(.)(.)\b|#(..)(..)(..)\b|(\d+)%,(\d+)%,(\d+)%(?:,([\d\.]+))?|(\d+),(\d+),(\d+)(?:,([\d\.]+))?\b/; h.toRGBA=function(a,e){e=[0,0,0,0];a.replace(/\s/g,"").replace(h.RGBA,function(a,b,g,d,c,h,k,l,m,n,p,q,r,s,t){k=[b+b||c,g+g||h,d+d||k];b=[l,m,n];for(a=0;3>a;a++)k[a]=parseInt(k[a],16),b[a]=Math.round(2.55*b[a]);e=[k[0]||b[0]||q||0,k[1]||b[1]||r||0,k[2]||b[2]||s||0,p||t||1]});return e};return h}();
@@ -24,6 +24,7 @@ var madinadSDK = {
         "_analytics_endpoint":"/api/session/",
 
         "_assets_endpoint": "http://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/" // s3 bucket
+        //"_assets_endpoint": "./assets/"    // local test assets
     },
 
     addEventListener: function(name, callback) {
@@ -106,11 +107,12 @@ var madinadSDK = {
                 }
 
                 madinadSDK.properties.find_position = ss.substring(ss.indexOf("&fp=")+4,ss.length);
-                madinadSDK.properties.find_position = (madinadSDK.properties.find_position == "true");//convert string to boolean
+                madinadSDK.properties.find_position = (madinadSDK.properties.find_position == "true");
+                // madinadSDK.properties.find_position = true;
             }
         }
-        var check_pos = false;//use it to handle timeout of navigator.geolocation (android devices problem and not only)
-        if (this.properties.find_position && navigator.geolocation) { // try go over asynch location calls
+        var check_pos = false;
+        if (this.properties.find_position && navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position){
                 check_pos = true;
                 madinadSDK.coords = position.coords || position.coordinate || position;
@@ -127,6 +129,15 @@ var madinadSDK = {
         if (check_pos==false){ //if everything fails end up here
             madinadSDK.communicate();
         }
+
+        /// ga - madinad traffic
+        //  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        //  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        //  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        //  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+         //
+        //  ga('create', 'UA-78714241-1', 'auto');
+        //  ga('send', 'pageview');
 
     },
 
@@ -146,8 +157,8 @@ var madinadSDK = {
         head.removeChild(script);
     },
 
-    main_callback: function(offers_data) {
-        var currentCampaign = madinadSDK.getCampaign(offers_data.c),
+    main_callback: function(campaigns_data) {
+        var currentCampaign = madinadSDK.getCampaign(campaigns_data.c),
             campaignType;
 
         if ( !currentCampaign ) {
@@ -155,9 +166,8 @@ var madinadSDK = {
             return;
         }
 
-        madinadSDK.offers_data = offers_data;
+        madinadSDK.offers_data = campaigns_data;
         madinadSDK.properties.cookie_lifetime = currentCampaign.c_lifetime || 1;
-        madinadSDK.setViewedCampaign(currentCampaign);
 
         campaignType = madinadSDK.getCampaignType(currentCampaign);
 
@@ -165,18 +175,24 @@ var madinadSDK = {
         {
             case 1: // simple image
                 clearInterval(madinadSDK.interv);
-                madinadSDK.render_banner();
+                madinadSDK.render_banner(currentCampaign, campaigns_data.url);
                 break;
             case 2: // full-page interstitial
                 clearInterval(madinadSDK.interv);
-                madinadSDK.render_interstitial(currentCampaign, offers_data.url);
+                madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
+                madinadSDK.setViewedCampaign(currentCampaign);
                 break;
             case 3: // full-page interstitial + banner
-                madinadSDK.render_interstitial(currentCampaign, offers_data.url);
-                madinadSDK.preloadBanner( madinadSDK.buildBannerSource(offers_data.url, currentCampaign) );
+                madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
+                madinadSDK.preloadBanner( madinadSDK.buildBannerSource(campaigns_data.url, currentCampaign) );
                 madinadSDK.addEventListener(madinadSDK.EVENTS.interstitialClosed, function() {
-                    madinadSDK.render_banner(currentCampaign, offers_data.url);
+                    madinadSDK.render_banner(currentCampaign, campaigns_data.url);
                 });
+                madinadSDK.setViewedCampaign(currentCampaign);
+                break;
+            case 4: // half-page interstitial
+                madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
+                madinadSDK.setViewedCampaign(currentCampaign);
                 break;
         }
     },
@@ -185,8 +201,8 @@ var madinadSDK = {
         var banner,
             bannerNode     = document.getElementById('madinad_banner'),
             destinationURL = campaign.url,
-            imageSource    = madinadSDK.buildBannerSource(base_url, campaign),
-            placeholderNode;
+            imageSource    = madinadSDK.buildBannerSource(base_url, campaign)
+        ;
 
         if (bannerNode != null){
             madinadSDK._remove_node('madinad_banner');
@@ -215,21 +231,20 @@ var madinadSDK = {
             document.body.style.marginBottom = node.height + 'px';
         });
 
-        //anim('madinad_banner',{ opacity: 1 }, 0.3);
     },
 
-    render_interstitial: function(offer_data,base_url){
-        var tmp_offer = offer_data;
+    render_interstitial: function(campaign_data,base_url, campaign_type){
+        var tmp_offer = campaign_data;
         var modal_tmp = document.getElementById("madinad_modal");
         if (modal_tmp != null){ // if a modal exists remove it to show the other one
             madinadSDK._remove_node("madinad_modal");
         }
-        madinadSDK.create_modal(base_url + tmp_offer.cid+"/index.html");
-        madinadSDK.post_offer_analytics();
-        madinadSDK.read_offer(offer_data.cid);
+        madinadSDK.create_modal(base_url + tmp_offer.cid+"/index.html", campaign_type);
+        madinadSDK.post_display_analytics();
+        madinadSDK.read_offer(campaign_data.cid);
     },
 
-    post_offer_analytics: function(){
+    post_display_analytics: function(){
         var data=[];
         var tmp_offers = madinadSDK.offers_data.c;
         for (var i=0; i<tmp_offers.length;i++){
@@ -261,29 +276,6 @@ var madinadSDK = {
     _remove_node: function(id) {
         if(document.getElementById(id))
             document.getElementById(id).parentNode.removeChild(document.getElementById(id));
-    },
-
-    ads_count: function() {
-        var elem_tmp = document.getElementById("unread_offers");
-        if (document.getElementById("unread_offers")){
-            elem_tmp.parentNode.removeChild(elem_tmp);
-        }
-        var badge = document.createElement('div');
-        badge.id = "unread_offers";
-        badge.className = "madinad-badge";
-        badge.innerHTML = madinadSDK.unread_offers;
-        document.getElementById("madinad_inbox").appendChild(badge);
-    },
-
-    calculate_unread_ads: function(){
-        var unread_offers = 0;
-        var offers = JSON.parse(madinadSDK.get_cookie("track_mdnd"));
-        for (var i=0; i < madinadSDK.offers_data.c.length; i++) {
-            if(!offers[madinadSDK.offers_data.c[i].cid]){
-                unread_offers += 1;
-            }
-        }
-        madinadSDK.unread_offers = unread_offers;
     },
 
     read_offer: function(cid){
@@ -355,7 +347,7 @@ var madinadSDK = {
 
     },
 
-    create_modal: function(url){
+    create_modal: function(url, campaign_type){
         var url_ref = url + '?r=' + madinadSDK.properties.app_uuid;
         var modal = document.createElement("div");
         modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
@@ -368,16 +360,16 @@ var madinadSDK = {
         modal.style.left = "0px";
         modal.style.opacity = 1;
         modal.style.width = "100%";
-        modal.style.height = "100%";
+        // modal.style.height = "100%";
+        modal.style.height = (campaign_type == 4)? "50%" : "100%";
         modal.style.maxHeight = "100%";
         modal.style.zIndex = "10000000";
-        modal.style.backgroundColor = "rgba(51, 51, 51, 0.8)";
+        // modal.style.backgroundColor = "rgba(51, 51, 51, 0.8)";
+        modal.style.backgroundColor = "rgba(211, 211, 211, 0.8)";
         document.getElementsByTagName("body")[0].appendChild(modal);
 
-        //anim("madinad_modal",{opacity: 1}, 0.3);
-
-        var el = document.getElementById("close_modal");
-        el.onclick = function(){
+        var close_btn = document.getElementById("close_modal");
+        close_btn.onclick = function(){
             this.parentNode.parentNode.removeChild(modal);
             madinadSDK.fireEvent(madinadSDK.EVENTS.interstitialClosed);
         };
@@ -432,9 +424,6 @@ var madinadSDK = {
         return cookie_data;
     },
 
-    del_cookie: function(cookie_name){
-        document.cookie = cookie_name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-    }
 };
 
 if((/iphone|ipod|android|ie|blackberry|ipad|fennec/).test(navigator.userAgent.toLowerCase())){
