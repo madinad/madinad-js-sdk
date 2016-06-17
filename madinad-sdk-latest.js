@@ -208,7 +208,7 @@ var madinadSDK = {
     getCampaignType: function (campaign) {
         var type;
 
-        if (campaign.i) {
+        if (campaign.i && !campaign.hp) {
             type = campaign.b ? 3 : 2;
         }
         else if (campaign.hp) {
@@ -361,7 +361,7 @@ var madinadSDK = {
         bannerNode.style.maxWidth = '100%';
         bannerNode.style.textAlign = 'center';
         bannerNode.style.zIndex = '10000000';
-        bannerNode.style.backgroundColor = 'rgba(51, 51, 51, 0.8)';
+        bannerNode.style.backgroundColor = 'rgba(211, 211, 211, 0.8)';
         document.body.appendChild(bannerNode);
 
         setTimeout(function () {
