@@ -377,7 +377,12 @@ var madinadSDK = {
         if (modal_tmp != null) { // if a modal exists remove it to show the other one
             madinadSDK._remove_node("madinad_modal");
         }
-        madinadSDK.create_modal(base_url + tmp_offer.cid + "/index.html", campaign_type);
+        madinadSDK.create_modal(
+            tmp_offer.cid,
+            base_url + tmp_offer.cid + "/index.html",
+            campaign_type,
+            campaign_data.custom_close_btn
+        );
         madinadSDK.post_display_analytics();
         madinadSDK.read_offer(campaign_data.cid);
     },
@@ -422,82 +427,24 @@ var madinadSDK = {
         madinadSDK.set_cookie("track_mdnd", JSON.stringify(campaigns));
     },
 
-    add_offer: function (offer_inbox, num, title, subtitle, logo, index_url, cid) {
-        var title = title;
-        var subtitle = subtitle;
-        var logo = logo;
-        var url = index_url;
-
-        var new_offer = document.createElement("div");
-        new_offer.id = "madinad_campaign" + num;
-        var campaigns_cookie = JSON.parse(madinadSDK.get_cookie('track_mdnd'));
-
-        if (!campaigns_cookie[cid]) {
-            // campaign is unread
-            // handle analytics and show interstitial
-            console.log("campaign is unread")
-
-            //        var offers = JSON.parse(madinadSDK.get_cookie("offers"));
-            //        if(!offers[cid]){ //if offer is unread
-            new_offer.style.borderLeft = "5px solid #fb955e";
-            //        }
-            new_offer.className = "madinad_campaign";
-            new_offer.style.marginTop = "0px";
-            new_offer.style.paddingBottom = "7px";
-            new_offer.style.height = "85px";
-            new_offer.style.boxShadow = "0 1px 0 #ccc";
-            new_offer.style.borderBottom = "1px solid #ccc";
-            new_offer.style.cursor = "pointer";
-            new_offer.setAttribute("offer_url", url);
-            var arrow = madinadSDK.properties._assets_endpoint + "../static/img/arrow.png";
-            new_offer.innerHTML = '<div style="margin-left:auto; margin-right:auto; width: 300px; padding-top: 12px;">' +
-                '<div style="float:right; font-size:22px; font-weight:700; margin-top:21px; margin-right: 15px;width:12px;height:21px;background:url(' + arrow + ') center center no-repeat;"></div>' +
-                '<img src=' + logo + ' width="70" height="70" style="float: left; border-radius: 5px;">' +
-                '<div class="madinad_textbox" style="margin-left:90px;">' +
-                '<div class="madinad_title" style="width: 155px;color:#2f3d46;line-height:1.3;font-weight:bold;font-size:13pt;">' + title + '</div>' +
-                '<div class="madinad_subtitle" style="color:#2f3d46;font-size: 10pt;line-height: 1.2;margin-top: 5px;">' + subtitle + '</div>' +
-                '</div>' +
-                '</div>';
-
-            document.getElementById(offer_inbox).appendChild(new_offer);
-            new_offer.onclick = function () {
-                madinadSDK.read_offer(cid);
-                madinadSDK.create_modal(url);
-                this.style.borderLeft = ""
-            };
-        } else {
-            // offer is seen before.
-            // 1. get current cookie | We already own it as campaigns_cookie
-            // 2. get date from current cookie
-            for (item in campaigns_cookie) {
-                var c_date = item.valueOf();
-                var today = new Date();
-                today = today.getDate()
-
-                // 3. check if date is a past date or today's
-
-                if (c_date < today) {
-                    // 4. if it is a past date, show interstitial and update cookie with today's date
-                    console.log("Show interstitial");
-                } else {
-                    // 5. if it is today's date, do not show again (fc=1 has achieved it's goal)
-                    console.log("Frequency cap limit");
-                }
-            }
-
-        }
-
-    },
-
-    create_modal: function (url, campaign_type) {
+    create_modal: function (cid, url, campaign_type, custom_close_btn) {
         var url_ref = url + '?r=' + madinadSDK.properties.app_uuid;
         var modal = document.createElement("div");
-        modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
-            '<img style="width: 100%;" src="http://madinad-prod.s3-website-eu-west-1.amazonaws.com/static/img/close.png" />' +
-            '</div>' +
-            '<div style="position:relative; height:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
-            '<iframe id="modal_iframe" src="' + url_ref + '" style="border: none; border-radius: 5px; overflow:auto; -webkit-overflow-scrolling:touch; display: block; margin-left: auto; margin-right: auto;" width="100%" height="100%"></iframe>' +
-            '</div>';
+        if (!custom_close_btn) {
+            modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
+                '<img style="width: 100%;" src="http://madinad-prod.s3-website-eu-west-1.amazonaws.com/static/img/close.png" />' +
+                '</div>' +
+                '<div style="position:relative; height:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
+                '<iframe id="modal_iframe" src="' + url_ref + '" style="border: none; border-radius: 5px; overflow:auto; -webkit-overflow-scrolling:touch; display: block; margin-left: auto; margin-right: auto;" width="100%" height="100%"></iframe>' +
+                '</div>';
+        } else {
+            modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
+                '<img style="width: 100%;" src="http://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/' + cid + '/close.png" />' +
+                '</div>' +
+                '<div style="position:relative; height:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
+                '<iframe id="modal_iframe" src="' + url_ref + '" style="border: none; border-radius: 5px; overflow:auto; -webkit-overflow-scrolling:touch; display: block; margin-left: auto; margin-right: auto;" width="100%" height="100%"></iframe>' +
+                '</div>';
+        }
         modal.id = "madinad_modal";
         modal.style.position = "fixed";
         modal.style.top = "0px";
@@ -508,7 +455,6 @@ var madinadSDK = {
         modal.style.height = (campaign_type == 4) ? "50%" : "100%";
         modal.style.maxHeight = "100%";
         modal.style.zIndex = "10000000";
-        // modal.style.backgroundColor = "rgba(51, 51, 51, 0.8)";
         modal.style.backgroundColor = "rgba(211, 211, 211, 0.8)";
         document.getElementsByTagName("body")[0].appendChild(modal);
 
@@ -566,7 +512,7 @@ var madinadSDK = {
             cookie_data = unescape(cookie_data.substring(coookie_data_start, cookie_data_end));
         }
         return cookie_data;
-    },
+    }
 
 };
 
