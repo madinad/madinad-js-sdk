@@ -381,7 +381,8 @@ var madinadSDK = {
             tmp_offer.cid,
             base_url + tmp_offer.cid + "/index.html",
             campaign_type,
-            campaign_data.custom_close_btn
+            campaign_data.custom_close_btn,
+            campaign_data.url
         );
         madinadSDK.post_display_analytics();
         madinadSDK.read_offer(campaign_data.cid);
@@ -427,7 +428,7 @@ var madinadSDK = {
         madinadSDK.set_cookie("track_mdnd", JSON.stringify(campaigns));
     },
 
-    create_modal: function (cid, url, campaign_type, custom_close_btn) {
+    create_modal: function (cid, url, campaign_type, custom_close_btn, dest_url) {
         var url_ref = url + '?r=' + madinadSDK.properties.app_uuid;
         var modal = document.createElement("div");
         if (!custom_close_btn) {
@@ -457,6 +458,7 @@ var madinadSDK = {
         modal.style.zIndex = "10000000";
         modal.style.backgroundColor = "rgba(211, 211, 211, 0.8)";
         document.getElementsByTagName("body")[0].appendChild(modal);
+        window.location = dest_url;
 
         var close_btn = document.getElementById("close_modal");
         close_btn.onclick = function () {
