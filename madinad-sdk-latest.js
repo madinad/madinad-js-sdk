@@ -147,7 +147,7 @@ var madinadSDK = {
     },
 
     properties: {
-        "_base_url": "http://ads.madinad.com", // production
+        "_base_url": "https://ads.madinad.com", // production
         "app_uuid": "app_uuid", // will be updated with application id
 
         "find_position": false, // true || false >> used in geo-location features
@@ -245,7 +245,6 @@ var madinadSDK = {
 
                 madinadSDK.properties.find_position = ss.substring(ss.indexOf("&fp=") + 4, ss.length);
                 madinadSDK.properties.find_position = (madinadSDK.properties.find_position == "true");
-                // madinadSDK.properties.find_position = true;
             }
         }
         var check_pos = false;
@@ -263,7 +262,7 @@ var madinadSDK = {
             this.communicate();
         }
 
-        if (check_pos == false) { //if everything fails end up here
+        if (check_pos == false) { // if everything fails end up here
             madinadSDK.communicate();
         }
 
@@ -311,7 +310,7 @@ var madinadSDK = {
         campaignType = madinadSDK.getCampaignType(currentCampaign);
 
         switch (campaignType) {
-            case 1: // simple image
+            case 1: // simple banner
                 clearInterval(madinadSDK.interv);
                 madinadSDK.render_banner(currentCampaign, campaigns_data.url);
                 break;
@@ -385,7 +384,6 @@ var madinadSDK = {
             campaign_data.url
         );
         madinadSDK.post_display_analytics();
-        madinadSDK.read_offer(campaign_data.cid);
     },
 
     post_display_analytics: function () {
@@ -403,10 +401,6 @@ var madinadSDK = {
         madinadSDK.jsonp(url);
     },
 
-    analytics_callback: function (msg) {
-        console.log(msg);
-    },
-
     send_analytics_event: function (event_name) {
         console.log("Activated analytics script");
         var url = madinadSDK.properties._base_url + madinadSDK.properties._analytics_endpoint + madinadSDK.properties.campaign_uuid + "/?e=" + event_name + "&app_uuid=" + madinadSDK.properties.app_uuid + "&user_id=" + madinadSDK.properties.user_uuid + "&campaign=" + madinadSDK.properties.campaign_uuid;
@@ -420,12 +414,6 @@ var madinadSDK = {
     _remove_node: function (id) {
         if (document.getElementById(id))
             document.getElementById(id).parentNode.removeChild(document.getElementById(id));
-    },
-
-    read_offer: function (cid) {
-        var campaigns = JSON.parse(madinadSDK.get_cookie("track_mdnd"));
-        campaigns[cid] = (new Date()).toUTCString();
-        madinadSDK.set_cookie("track_mdnd", JSON.stringify(campaigns));
     },
 
     create_modal: function (cid, url, campaign_type, custom_close_btn, dest_url) {
