@@ -157,7 +157,7 @@ var madinadSDK = {
         "_api_endpoint": "/api/campaigns/",
         "_analytics_endpoint": "/api/session/",
 
-        "_assets_endpoint": "http://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/" // s3 bucket
+        "_assets_endpoint": "https://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/" // s3 bucket
         //"_assets_endpoint": "./assets/"    // local test assets
     },
 
@@ -421,14 +421,14 @@ var madinadSDK = {
         var modal = document.createElement("div");
         if (!custom_close_btn) {
             modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
-                '<img style="width: 100%;" src="http://madinad-prod.s3-website-eu-west-1.amazonaws.com/static/img/close.png" />' +
+                '<img style="width: 100%;" src="https://madinad-prod.s3-website-eu-west-1.amazonaws.com/static/img/close.png" />' +
                 '</div>' +
                 '<div style="position:relative; height:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
                 '<iframe id="modal_iframe" src="' + url_ref + '" style="border: none; border-radius: 5px; overflow:auto; -webkit-overflow-scrolling:touch; display: block; margin-left: auto; margin-right: auto;" width="100%" height="100%"></iframe>' +
                 '</div>';
         } else {
             modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
-                '<img style="width: 100%;" src="http://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/' + cid + '/close.png" />' +
+                '<img style="width: 100%;" src="https://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/' + cid + '/close.png" />' +
                 '</div>' +
                 '<div style="position:relative; height:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
                 '<iframe id="modal_iframe" src="' + url_ref + '" style="border: none; border-radius: 5px; overflow:auto; -webkit-overflow-scrolling:touch; display: block; margin-left: auto; margin-right: auto;" width="100%" height="100%"></iframe>' +
