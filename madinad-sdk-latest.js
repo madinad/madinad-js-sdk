@@ -1,5 +1,5 @@
 // MadInAd SDK
-// V1.2.1
+// V1.2.2
 
 //https://github.com/relay/anim
 var anim = function (h) {
