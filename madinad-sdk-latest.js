@@ -1,5 +1,5 @@
 // MadInAd SDK
-// V1.2
+// V1.2.1
 
 //https://github.com/relay/anim
 var anim = function (h) {
@@ -245,6 +245,7 @@ var madinadSDK = {
 
                 madinadSDK.properties.find_position = ss.substring(ss.indexOf("&fp=") + 4, ss.length);
                 madinadSDK.properties.find_position = (madinadSDK.properties.find_position == "true");
+                // madinadSDK.properties.find_position = true;
             }
         }
         var check_pos = false;
@@ -262,7 +263,7 @@ var madinadSDK = {
             this.communicate();
         }
 
-        if (check_pos == false) { // if everything fails end up here
+        if (check_pos == false) { //if everything fails end up here
             madinadSDK.communicate();
         }
 
@@ -279,7 +280,7 @@ var madinadSDK = {
 
     communicate: function () {
         this.set_user_info();
-        var url = madinadSDK.properties._base_url + madinadSDK.properties._api_endpoint + madinadSDK.properties.app_uuid + "/?web_context=" + encodeURI(JSON.stringify(madinadSDK.user_info));
+        var url = madinadSDK.properties._base_url + madinadSDK.properties._api_endpoint + madinadSDK.properties.app_uuid + "/?madinad_ctx=" + encodeURI(JSON.stringify(madinadSDK.user_info));
         url += "&callback=madinadSDK.main_callback";
         madinadSDK.jsonp(url);
         madinadSDK.interv = setInterval(function () {
@@ -384,6 +385,7 @@ var madinadSDK = {
             campaign_data.url
         );
         madinadSDK.post_display_analytics();
+        madinadSDK.read_offer(campaign_data.cid);
     },
 
     post_display_analytics: function () {
@@ -421,14 +423,14 @@ var madinadSDK = {
         var modal = document.createElement("div");
         if (!custom_close_btn) {
             modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
-                '<img style="width: 100%;" src="https://madinad-prod.s3-website-eu-west-1.amazonaws.com/static/img/close.png" />' +
+                '<img style="width: 100%;" src="http://madinad-prod.s3-website-eu-west-1.amazonaws.com/static/img/close.png" />' +
                 '</div>' +
                 '<div style="position:relative; height:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
                 '<iframe id="modal_iframe" src="' + url_ref + '" style="border: none; border-radius: 5px; overflow:auto; -webkit-overflow-scrolling:touch; display: block; margin-left: auto; margin-right: auto;" width="100%" height="100%"></iframe>' +
                 '</div>';
         } else {
             modal.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
-                '<img style="width: 100%;" src="https://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/' + cid + '/close.png" />' +
+                '<img style="width: 100%;" src="http://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/' + cid + '/close.png" />' +
                 '</div>' +
                 '<div style="position:relative; height:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
                 '<iframe id="modal_iframe" src="' + url_ref + '" style="border: none; border-radius: 5px; overflow:auto; -webkit-overflow-scrolling:touch; display: block; margin-left: auto; margin-right: auto;" width="100%" height="100%"></iframe>' +
@@ -446,7 +448,7 @@ var madinadSDK = {
         modal.style.zIndex = "10000000";
         modal.style.backgroundColor = "rgba(211, 211, 211, 0.8)";
         document.getElementsByTagName("body")[0].appendChild(modal);
-        window.location = dest_url;
+        // window.location = dest_url;
 
         var close_btn = document.getElementById("close_modal");
         close_btn.onclick = function () {
