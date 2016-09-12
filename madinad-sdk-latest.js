@@ -153,6 +153,7 @@ var madinadSDK = {
         "find_position": false, // true || false >> used in geo-location features
         "polling_interval": 30000,
         "cookie_lifetime": 30, // default cookie lifetime (days)
+        "require_fc": true, // required fc=1 for request
 
         "_api_endpoint": "/api/campaigns/",
         "_analytics_endpoint": "/api/session/",
@@ -192,16 +193,18 @@ var madinadSDK = {
     },
 
     getCampaign: function (campaigns) {
-        var campaign,
-            i;
-
+        var campaign, i;
         for (i = 0; i < campaigns.length; i++) {
-            if (madinadSDK.get_cookie('viewed_' + campaigns[i].cid) !== '1') {
+            if (campaigns[i].fc) {
+                if (madinadSDK.get_cookie('viewed_' + campaigns[i].cid) !== '1') {
+                    campaign = campaigns[i];
+                    break;
+                }
+            } else {
                 campaign = campaigns[i];
                 break;
             }
         }
-
         return campaign;
     },
 
@@ -308,6 +311,10 @@ var madinadSDK = {
         madinadSDK.campaigns_data = campaigns_data;
         madinadSDK.properties.cookie_lifetime = currentCampaign.c_lifetime || 1;
 
+        if (!currentCampaign.fc) {
+            madinadSDK.properties.require_fc = false;
+        }
+
         campaignType = madinadSDK.getCampaignType(currentCampaign);
 
         switch (campaignType) {
@@ -318,7 +325,9 @@ var madinadSDK = {
             case 2: // full-page interstitial
                 clearInterval(madinadSDK.interv);
                 madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
-                madinadSDK.setViewedCampaign(currentCampaign);
+                if (madinadSDK.properties.require_fc) {
+                    madinadSDK.setViewedCampaign(currentCampaign);
+                }
                 break;
             case 3: // full-page interstitial + banner
                 madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
@@ -326,11 +335,15 @@ var madinadSDK = {
                 madinadSDK.addEventListener(madinadSDK.EVENTS.interstitialClosed, function () {
                     madinadSDK.render_banner(currentCampaign, campaigns_data.url);
                 });
-                madinadSDK.setViewedCampaign(currentCampaign);
+                if (madinadSDK.properties.require_fc) {
+                    madinadSDK.setViewedCampaign(currentCampaign);
+                }
                 break;
             case 4: // half-page interstitial
                 madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
-                madinadSDK.setViewedCampaign(currentCampaign);
+                if (madinadSDK.properties.require_fc) {
+                    madinadSDK.setViewedCampaign(currentCampaign);
+                }
                 break;
         }
     },
@@ -385,7 +398,6 @@ var madinadSDK = {
             campaign_data.url
         );
         madinadSDK.post_display_analytics();
-        madinadSDK.read_offer(campaign_data.cid);
     },
 
     post_display_analytics: function () {
@@ -401,16 +413,6 @@ var madinadSDK = {
             this.user_info.app_uuid + "/?data=" +
             encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
         madinadSDK.jsonp(url);
-    },
-
-    send_analytics_event: function (event_name) {
-        console.log("Activated analytics script");
-        var url = madinadSDK.properties._base_url + madinadSDK.properties._analytics_endpoint + madinadSDK.properties.campaign_uuid + "/?e=" + event_name + "&app_uuid=" + madinadSDK.properties.app_uuid + "&user_id=" + madinadSDK.properties.user_uuid + "&campaign=" + madinadSDK.properties.campaign_uuid;
-        var head = document.head;
-        var script = document.createElement("script");
-        script.setAttribute("src", url);
-        head.appendChild(script);
-        head.removeChild(script);
     },
 
     _remove_node: function (id) {
