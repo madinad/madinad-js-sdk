@@ -158,7 +158,7 @@ var madinadSDK = {
         "_api_endpoint": "/api/campaigns/",
         "_analytics_endpoint": "/api/session/",
 
-        "_assets_endpoint": "https://madinad-prod.s3-website-eu-west-1.amazonaws.com/campaign_assets/" // s3 bucket
+        "_assets_endpoint": "https://madinad-prod.s3.amazonaws.com/campaign_assets/" // s3 bucket
         //"_assets_endpoint": "./assets/"    // local test assets
     },
 
@@ -209,18 +209,31 @@ var madinadSDK = {
     },
 
     getCampaignType: function (campaign) {
+        // campaign types:
+        // 1. simple banner
+        // 2. full page interstitial
+        // 3. full-page interstitial + banner (fulltobanner)
+        // 4. half-page interstitial
+        // 5. carousel full page interstitial
+
         var type;
-
-        if (campaign.i && !campaign.hp) {
-            type = campaign.b ? 3 : 2;
+        switch (campaign.adf) {
+            case 'B':
+                type = 1;
+                break;
+            case 'FP':
+                type = 2;
+                break;
+            case 'F2B':
+                type = 3;
+                break;
+            case 'HP':
+                type = 4;
+                break;
+            case 'CRL':
+                type = 5;
+                break;
         }
-        else if (campaign.hp) {
-            type = 4;
-        }
-        else {
-            type = 1;
-        }
-
         return type;
     },
 
