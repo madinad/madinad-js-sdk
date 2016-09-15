@@ -358,6 +358,14 @@ var madinadSDK = {
                     madinadSDK.setViewedCampaign(currentCampaign);
                 }
                 break;
+            case 5:
+                // carousel
+                clearInterval(madinadSDK.interv);
+                madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
+                if (madinadSDK.properties.require_fc) {
+                    madinadSDK.setViewedCampaign(currentCampaign);
+                }
+                break;
         }
     },
 
