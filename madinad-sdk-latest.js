@@ -295,9 +295,9 @@ var madinadSDK = {
         var url = madinadSDK.properties._base_url + madinadSDK.properties._api_endpoint + madinadSDK.properties.app_uuid + "/?madinad_ctx=" + encodeURI(JSON.stringify(madinadSDK.user_info));
         url += "&callback=madinadSDK.main_callback";
         madinadSDK.jsonp(url);
-        madinadSDK.interv = setInterval(function () {
-            madinadSDK.jsonp(url);
-        }, madinadSDK.properties.polling_interval);
+        // madinadSDK.interv = setInterval(function () {
+        //     madinadSDK.jsonp(url);
+        // }, madinadSDK.properties.polling_interval);
     },
 
     jsonp: function (url) {
