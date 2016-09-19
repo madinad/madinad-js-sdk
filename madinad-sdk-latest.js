@@ -1,5 +1,5 @@
 // MadInAd SDK
-// V1.2.2
+// V1.2.3
 
 //https://github.com/relay/anim
 var anim = function (h) {
@@ -412,7 +412,7 @@ var madinadSDK = {
             base_url + c.cid + "/index.html",
             campaign_type,
             campaign_data.custom_close_btn,
-            campaign_data.url
+            c.auto_close_timeout
         );
         madinadSDK.post_display_analytics();
     },
@@ -437,7 +437,7 @@ var madinadSDK = {
             document.getElementById(id).parentNode.removeChild(document.getElementById(id));
     },
 
-    create_modal: function (cid, url, campaign_type, custom_close_btn) {
+    create_modal: function (cid, url, campaign_type, custom_close_btn, auto_close) {
         var url_ref = url + '?r=' + madinadSDK.properties.app_uuid;
         var modal = document.createElement("div");
         if (!custom_close_btn) {
@@ -470,6 +470,12 @@ var madinadSDK = {
         // window.location = dest_url;
 
         var close_btn = document.getElementById("close_modal");
+        if (auto_close) {
+          var time_in_mil = auto_close * 1000;
+          setTimeout(function() {   //calls click event after a certain time
+             document.getElementById("madinad_modal").remove();
+          }, time_in_mil);
+        }
         close_btn.onclick = function () {
             this.parentNode.parentNode.removeChild(modal);
             madinadSDK.fireEvent(madinadSDK.EVENTS.interstitialClosed);
