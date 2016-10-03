@@ -295,6 +295,7 @@ var madinadSDK = {
         var url = madinadSDK.properties._base_url + madinadSDK.properties._api_endpoint + madinadSDK.properties.app_uuid + "/?madinad_ctx=" + encodeURI(JSON.stringify(madinadSDK.user_info));
         url += "&callback=madinadSDK.main_callback";
         madinadSDK.jsonp(url);
+        // todo: use this.jsonObjToParams() to convert JSON obj to url params
         // madinadSDK.interv = setInterval(function () {
         //     madinadSDK.jsonp(url);
         // }, madinadSDK.properties.polling_interval);
@@ -417,6 +418,7 @@ var madinadSDK = {
         madinadSDK.post_display_analytics();
     },
 
+    // todo: rename this function name to reflect it's actual usage
     post_display_analytics: function () {
         var data = [];
         var campaigns = madinadSDK.campaigns_data.c;
@@ -430,6 +432,25 @@ var madinadSDK = {
             this.user_info.app_uuid + "/?data=" +
             encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
         madinadSDK.jsonp(url);
+    },
+
+    jsonObjToParams: function(json) {
+        // http://stackoverflow.com/questions/14525178/is-there-any-native-function-to-convert-json-to-url-parameters
+        return '?' +
+            Object.keys(json).map(function(key) {
+                return encodeURIComponent(key) + '=' +
+                    encodeURIComponent(json[key]);
+            }).join('&');
+    },
+
+    addTrackingImg: function() {
+        // experimental
+        var img = document.createElement("img");
+        var req_args = this.jsonObjToParams(this.user_info);
+        img.src = "will be given" + url_params;
+        img.width = 1;
+        img.height = 1;
+        document.getElementsByTagName("body")[0].appendChild(img);
     },
 
     _remove_node: function (id) {
@@ -499,7 +520,18 @@ var madinadSDK = {
             "app_uuid": madinadSDK.properties.app_uuid,
             "lat": user_lat,
             "lng": user_lng,
-            "redirected_url": document.referrer || "unknown"
+            "redirected_url": document.referrer || "unknown",
+
+            // todo: append functionality
+            "mobile_browser": "todo",
+            "tablet": "todo",
+            "browser_version": "todo",
+            "model": "todo",
+            "vendor": "todo",
+            "os": "todo",
+            "os_version": "todo",
+            "screen_height": window.screen.height,
+            "screen_width":  window.screen.width
         }
     },
 
