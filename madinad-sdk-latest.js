@@ -299,16 +299,19 @@ var madinadSDK = {
 
     properties: {
         "_base_url": "https://ads.madinad.com", // production
-        "app_uuid": "app_uuid", // will be updated with application id
 
+        "app_uuid": "app_uuid", // will be updated with application id
         "find_position": false,
         "polling_interval": 30000,
         "cookie_lifetime": 1, // cookie lifetime defaults to 1 (days)
         "require_fc": true, // required fc=1 for request
 
         "_api_endpoint": "/api/campaigns/",
-        "_analytics_endpoint": "/api/session/",
+        "_sessions_endpoint": "/api/session/",
         "_assets_endpoint": "https://madinad-prod.s3.amazonaws.com/campaign_assets/" // s3 bucket
+
+        "_analytic_url": "https://madinadio.herokuapp.com",
+        "device_profling_endpoint": "/devices/"
     },
 
     addEventListener: function (name, callback) {
@@ -654,25 +657,24 @@ var madinadSDK = {
             campaign_data.custom_close_btn,
             c.auto_close_timeout
         );
-        // DEPRECATED IN 1.2.5
-        // madinadSDK.post_display_analytics();
+
+        madinadSDK.post_display_analytics();
     },
 
-    // DEPRECATED IN 1.2.5
-    // post_display_analytics: function () {
-    //     var data = [];
-    //     var campaigns = madinadSDK.campaigns_data.c;
-    //     for (var i = 0; i < campaigns.length; i++) {
-    //         data[i] = {
-    //             "cid": campaigns[i].cid,
-    //             "a": "interstitial"
-    //         };
-    //     }
-    //     var url = madinadSDK.properties._base_url + madinadSDK.properties._analytics_endpoint +
-    //         this.user_info.app_uuid + "/?data=" +
-    //         encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
-    //     madinadSDK.jsonp(url);
-    // },
+    post_display_analytics: function () {
+        var data = [];
+        var campaigns = madinadSDK.campaigns_data.c;
+        for (var i = 0; i < campaigns.length; i++) {
+            data[i] = {
+                "cid": campaigns[i].cid,
+                "a": "interstitial"
+            };
+        }
+        var url = madinadSDK.properties._base_url + madinadSDK.properties._sessions_endpoint +
+            this.user_info.app_uuid + "/?data=" +
+            encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
+        madinadSDK.jsonp(url);
+    },
 
     jsonObjToParams: function (json) {
         // http://stackoverflow.com/questions/14525178/is-there-any-native-function-to-convert-json-to-url-parameters
@@ -691,6 +693,10 @@ var madinadSDK = {
         img.width = 1;
         img.height = 1;
         document.getElementsByTagName("body")[0].appendChild(img);
+    },
+
+    send_device_details: function() {
+        // todo: place in here device profiling code
     },
 
     _remove_node: function (id) {
