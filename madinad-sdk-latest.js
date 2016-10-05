@@ -654,23 +654,25 @@ var madinadSDK = {
             campaign_data.custom_close_btn,
             c.auto_close_timeout
         );
-        madinadSDK.post_display_analytics();
+        // DEPRECATED IN 1.2.5
+        // madinadSDK.post_display_analytics();
     },
 
-    post_display_analytics: function () {
-        var data = [];
-        var campaigns = madinadSDK.campaigns_data.c;
-        for (var i = 0; i < campaigns.length; i++) {
-            data[i] = {
-                "cid": campaigns[i].cid,
-                "a": "interstitial"
-            };
-        }
-        var url = madinadSDK.properties._base_url + madinadSDK.properties._analytics_endpoint +
-            this.user_info.app_uuid + "/?data=" +
-            encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
-        madinadSDK.jsonp(url);
-    },
+    // DEPRECATED IN 1.2.5
+    // post_display_analytics: function () {
+    //     var data = [];
+    //     var campaigns = madinadSDK.campaigns_data.c;
+    //     for (var i = 0; i < campaigns.length; i++) {
+    //         data[i] = {
+    //             "cid": campaigns[i].cid,
+    //             "a": "interstitial"
+    //         };
+    //     }
+    //     var url = madinadSDK.properties._base_url + madinadSDK.properties._analytics_endpoint +
+    //         this.user_info.app_uuid + "/?data=" +
+    //         encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
+    //     madinadSDK.jsonp(url);
+    // },
 
     jsonObjToParams: function (json) {
         // http://stackoverflow.com/questions/14525178/is-there-any-native-function-to-convert-json-to-url-parameters
