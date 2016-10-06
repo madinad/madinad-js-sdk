@@ -309,9 +309,6 @@ var madinadSDK = {
         "_api_endpoint": "/api/campaigns/",
         "_sessions_endpoint": "/api/session/",
         "_assets_endpoint": "https://madinad-prod.s3.amazonaws.com/campaign_assets/" // s3 bucket
-
-        "_analytic_url": "https://madinadio.herokuapp.com",
-        "device_profling_endpoint": "/devices/"
     },
 
     addEventListener: function (name, callback) {
