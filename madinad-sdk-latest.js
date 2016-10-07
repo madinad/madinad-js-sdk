@@ -394,6 +394,12 @@ var madinadSDK = {
             case 'EIB':
                 type = 7;
                 break;
+            case 'MPLX':
+                type = 8;
+                break;
+            case 'IARL':
+                type = 9;
+                break;
         }
         return type;
     },
@@ -573,7 +579,88 @@ var madinadSDK = {
                   }
                 };
                 break;
+             case 8:
+                  clearInterval(madinadSDK.interv);
+                  madinadSDK.render_parallax(currentCampaign);
+                break;
+             case 9:
+                  clearInterval(madinadSDK.interv);
+                  madinadSDK.render_inarticle(currentCampaign);
+                break;
         }
+    },
+
+    render_parallax: function (campaign) {
+      var parallaxNode = document.getElementById('madinad_parallax'),
+          destinationURL = campaign.url;
+
+      var css = '#madinad_parallax{width:100%;height:150px;position:relative;margin-top:17px;margin-bottom:5px;margin-left:auto;margin-right:auto;border-bottom:2px solid #000000;background-color:#000000;}' +
+      '#madinad_divabs{width:100%;height:100%;position:absolute;top:0;left:0;clip:rect(auto,auto,auto,auto);}' +
+      '#madinad_destination{z-index:11;width:100%;height:100%;position:absolute;top:0;left:0;display:block;cursor:pointer;background-color:white;opacity:0;filter:alpha(opacity=0);}' +
+      '#madinad_divfix{width:398px;height:100%;position:fixed;top:0px;-moz-transform:translateZ(0);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0);margin:0 auto;}' +
+      '#madinad_image{width:100%;height:905px;border:none;position:absolute;bottom:0;left:0;-moz-transform:translateZ(0);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0); top: -89px;}' +
+      '#madinad_addiv{position:absolute;left:0;bottom:150px;width:100%;text-align:center;font-family: Arial,sans-serif;background-color:#000000;font-size:12px;color:#ffffff}',
+      head = document.head || document.getElementsByTagName('head')[0],
+      style = document.createElement('style');
+
+      style.type = 'text/css';
+      if (style.styleSheet){
+        style.styleSheet.cssText = css;
+      } else {
+        style.appendChild(document.createTextNode(css));
+      }
+
+      head.appendChild(style);
+
+      if (parallaxNode != null) {
+          madinadSDK._remove_node('madinad_parallax');
+      }
+      parallaxNode = document.createElement('div');
+      parallaxNode.id = 'madinad_parallax';
+
+      parallaxNode.innerHTML = '<div id="madinad_divabs">' +
+          '<div id="madinad_divfix">' +
+              '<img id="madinad_image" src="' + campaign.image + '">' +
+          '</div>' +
+      '</div>' +
+      '<a id="madinad_destination" href="' + destinationURL + '" target="_blank"></a>' +
+      '<span id="madinad_addiv">Madinad Advertisement</span>';
+
+      document.body.appendChild(parallaxNode);
+    },
+
+    render_inarticle: function(campaign) {
+      var inarticleNode = document.getElementById('madinad_advertisement'),
+          destinationURL = campaign.url;
+
+      var css = '#madinad_advertisement { display: block; box-sizing: border-box; border: 2px solid black; }'
+      	+ '#madinad_advertisement span { display: block; color: white; text-align: center; width: 100%; background-color: black; }'
+      	+ '#madinad_advertisement a { display: block; width: 100%;}'
+      	+ '#madinad_advertisement img {width:100%;height:100%;}',
+      head = document.head || document.getElementsByTagName('head')[0],
+      style = document.createElement('style');
+
+      style.type = 'text/css';
+      if (style.styleSheet){
+        style.styleSheet.cssText = css;
+      } else {
+        style.appendChild(document.createTextNode(css));
+      }
+
+      head.appendChild(style);
+
+      if (inarticleNode != null) {
+          madinadSDK._remove_node('madinad_advertisement');
+      }
+      inarticleNode = document.createElement('div');
+      inarticleNode.id = 'madinad_advertisement';
+
+      inarticleNode.innerHTML = '<span>Madinad Advertisement</span>'
+      	+ '<a href="' + destinationURL + '">' +
+      	+	'<img src="' + campaign.image + '">'
+      	+ '</a>';
+
+      document.body.appendChild(inarticleNode);
     },
 
     render_inbox: function (campaign) {
