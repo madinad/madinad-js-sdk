@@ -656,7 +656,7 @@ var madinadSDK = {
       inarticleNode.id = 'madinad_advertisement';
 
       inarticleNode.innerHTML = '<span>Madinad Advertisement</span>'
-      	+ '<a href="' + destinationURL + '">' +
+      	+ '<a href="' + destinationURL + '">'
       	+	'<img src="' + campaign.image + '">'
       	+ '</a>';
 
