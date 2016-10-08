@@ -370,6 +370,8 @@ var madinadSDK = {
         // 5. carousel full page interstitial
         // 6. expandable banner
         // 7. expandable inbox
+        // 8. mobile parallax
+        // 9. in-article
 
         var type;
         switch (campaign.adf) {
@@ -580,10 +582,12 @@ var madinadSDK = {
                 };
                 break;
              case 8:
+                 // mobile parallax
                   clearInterval(madinadSDK.interv);
                   madinadSDK.render_parallax(currentCampaign);
                 break;
              case 9:
+                 // in-article
                   clearInterval(madinadSDK.interv);
                   madinadSDK.render_inarticle(currentCampaign);
                 break;
