@@ -308,7 +308,8 @@ var madinadSDK = {
 
         "_api_endpoint": "/api/campaigns/",
         "_sessions_endpoint": "/api/session/",
-        "_assets_endpoint": "https://madinad-prod.s3.amazonaws.com/campaign_assets/" // s3 bucket
+        // todo: deprecated
+        // "_assets_endpoint": "https://madinad-prod.s3.amazonaws.com/campaign_assets/" // s3 bucket
     },
 
     addEventListener: function (name, callback) {
