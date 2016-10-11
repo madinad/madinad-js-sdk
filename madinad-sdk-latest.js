@@ -286,9 +286,195 @@ var anim = function (h) {
 })(typeof window == "object" ? window : this);
 
 // Ifvisible
-(function(){!function(a,b){return"function"==typeof define&&define.amd?define(function(){return b()}):"object"==typeof exports?module.exports=b():a.ifvisible=b()}(this,function(){var a,b,c,d,e,f,g,h,i,j,k,l,m,n;return i={},c=document,k=!1,l="active",g=6e4,f=!1,b=function(){var a,b,c,d,e,f,g;return a=function(){return(65536*(1+Math.random())|0).toString(16).substring(1)},e=function(){return a()+a()+"-"+a()+"-"+a()+"-"+a()+"-"+a()+a()+a()},f={},c="__ceGUID",b=function(a,b,d){return a[c]=void 0,a[c]||(a[c]="ifvisible.object.event.identifier"),f[a[c]]||(f[a[c]]={}),f[a[c]][b]||(f[a[c]][b]=[]),f[a[c]][b].push(d)},d=function(a,b,d){var e,g,h,i,j;if(a[c]&&f[a[c]]&&f[a[c]][b]){for(i=f[a[c]][b],j=[],g=0,h=i.length;g<h;g++)e=i[g],j.push(e(d||{}));return j}},g=function(a,b,d){var e,g,h,i,j;if(d){if(a[c]&&f[a[c]]&&f[a[c]][b])for(j=f[a[c]][b],g=h=0,i=j.length;h<i;g=++h)if(e=j[g],e===d)return f[a[c]][b].splice(g,1),e}else if(a[c]&&f[a[c]]&&f[a[c]][b])return delete f[a[c]][b]},{add:b,remove:g,fire:d}}(),a=function(){var a;return a=!1,function(b,c,d){return a||(a=b.addEventListener?function(a,b,c){return a.addEventListener(b,c,!1)}:b.attachEvent?function(a,b,c){return a.attachEvent("on"+b,c,!1)}:function(a,b,c){return a["on"+b]=c}),a(b,c,d)}}(),d=function(a,b){var d;return c.createEventObject?a.fireEvent("on"+b,d):(d=c.createEvent("HTMLEvents"),d.initEvent(b,!0,!0),!a.dispatchEvent(d))},h=function(){var a,b,d,e,f;for(e=void 0,f=3,d=c.createElement("div"),a=d.getElementsByTagName("i"),b=function(){return d.innerHTML="<!--[if gt IE "+ ++f+"]><i></i><![endif]-->",a[0]};b(););return f>4?f:e}(),e=!1,n=void 0,"undefined"!=typeof c.hidden?(e="hidden",n="visibilitychange"):"undefined"!=typeof c.mozHidden?(e="mozHidden",n="mozvisibilitychange"):"undefined"!=typeof c.msHidden?(e="msHidden",n="msvisibilitychange"):"undefined"!=typeof c.webkitHidden&&(e="webkitHidden",n="webkitvisibilitychange"),m=function(){var b,d;return b=[],d=function(){return b.map(clearTimeout),"active"!==l&&i.wakeup(),f=+new Date,b.push(setTimeout(function(){if("active"===l)return i.idle()},g))},d(),a(c,"mousemove",d),a(c,"keyup",d),a(c,"touchstart",d),a(window,"scroll",d),i.focus(d),i.wakeup(d)},j=function(){var b;return!!k||(e===!1?(b="blur",h<9&&(b="focusout"),a(window,b,function(){return i.blur()}),a(window,"focus",function(){return i.focus()})):a(c,n,function(){return c[e]?i.blur():i.focus()},!1),k=!0,m())},i={setIdleDuration:function(a){return g=1e3*a},getIdleDuration:function(){return g},getIdleInfo:function(){var a,b;return a=+new Date,b={},"idle"===l?(b.isIdle=!0,b.idleFor=a-f,b.timeLeft=0,b.timeLeftPer=100):(b.isIdle=!1,b.idleFor=a-f,b.timeLeft=f+g-a,b.timeLeftPer=(100-100*b.timeLeft/g).toFixed(2)),b},focus:function(a){return"function"==typeof a?this.on("focus",a):(l="active",b.fire(this,"focus"),b.fire(this,"wakeup"),b.fire(this,"statusChanged",{status:l})),this},blur:function(a){return"function"==typeof a?this.on("blur",a):(l="hidden",b.fire(this,"blur"),b.fire(this,"idle"),b.fire(this,"statusChanged",{status:l})),this},idle:function(a){return"function"==typeof a?this.on("idle",a):(l="idle",b.fire(this,"idle"),b.fire(this,"statusChanged",{status:l})),this},wakeup:function(a){return"function"==typeof a?this.on("wakeup",a):(l="active",b.fire(this,"wakeup"),b.fire(this,"statusChanged",{status:l})),this},on:function(a,c){return j(),b.add(this,a,c),this},off:function(a,c){return j(),b.remove(this,a,c),this},onEvery:function(a,b){var c,d;return j(),c=!1,b&&(d=setInterval(function(){if("active"===l&&c===!1)return b()},1e3*a)),{stop:function(){return clearInterval(d)},pause:function(){return c=!0},resume:function(){return c=!1},code:d,callback:b}},now:function(a){return j(),l===(a||"active")}}})}).call(this);
+(function () {
+    !function (a, b) {
+        return "function" == typeof define && define.amd ? define(function () {
+            return b()
+        }) : "object" == typeof exports ? module.exports = b() : a.ifvisible = b()
+    }(this, function () {
+        var a, b, c, d, e, f, g, h, i, j, k, l, m, n;
+        return i = {}, c = document, k = !1, l = "active", g = 6e4, f = !1, b = function () {
+            var a, b, c, d, e, f, g;
+            return a = function () {
+                return (65536 * (1 + Math.random()) | 0).toString(16).substring(1)
+            }, e = function () {
+                return a() + a() + "-" + a() + "-" + a() + "-" + a() + "-" + a() + a() + a()
+            }, f = {}, c = "__ceGUID", b = function (a, b, d) {
+                return a[c] = void 0, a[c] || (a[c] = "ifvisible.object.event.identifier"), f[a[c]] || (f[a[c]] = {}), f[a[c]][b] || (f[a[c]][b] = []), f[a[c]][b].push(d)
+            }, d = function (a, b, d) {
+                var e, g, h, i, j;
+                if (a[c] && f[a[c]] && f[a[c]][b]) {
+                    for (i = f[a[c]][b], j = [], g = 0, h = i.length; g < h; g++)e = i[g], j.push(e(d || {}));
+                    return j
+                }
+            }, g = function (a, b, d) {
+                var e, g, h, i, j;
+                if (d) {
+                    if (a[c] && f[a[c]] && f[a[c]][b])for (j = f[a[c]][b], g = h = 0, i = j.length; h < i; g = ++h)if (e = j[g], e === d)return f[a[c]][b].splice(g, 1), e
+                } else if (a[c] && f[a[c]] && f[a[c]][b])return delete f[a[c]][b]
+            }, {add: b, remove: g, fire: d}
+        }(), a = function () {
+            var a;
+            return a = !1, function (b, c, d) {
+                return a || (a = b.addEventListener ? function (a, b, c) {
+                    return a.addEventListener(b, c, !1)
+                } : b.attachEvent ? function (a, b, c) {
+                    return a.attachEvent("on" + b, c, !1)
+                } : function (a, b, c) {
+                    return a["on" + b] = c
+                }), a(b, c, d)
+            }
+        }(), d = function (a, b) {
+            var d;
+            return c.createEventObject ? a.fireEvent("on" + b, d) : (d = c.createEvent("HTMLEvents"), d.initEvent(b, !0, !0), !a.dispatchEvent(d))
+        }, h = function () {
+            var a, b, d, e, f;
+            for (e = void 0, f = 3, d = c.createElement("div"), a = d.getElementsByTagName("i"), b = function () {
+                return d.innerHTML = "<!--[if gt IE " + ++f + "]><i></i><![endif]-->", a[0]
+            }; b(););
+            return f > 4 ? f : e
+        }(), e = !1, n = void 0, "undefined" != typeof c.hidden ? (e = "hidden", n = "visibilitychange") : "undefined" != typeof c.mozHidden ? (e = "mozHidden", n = "mozvisibilitychange") : "undefined" != typeof c.msHidden ? (e = "msHidden", n = "msvisibilitychange") : "undefined" != typeof c.webkitHidden && (e = "webkitHidden", n = "webkitvisibilitychange"), m = function () {
+            var b, d;
+            return b = [], d = function () {
+                return b.map(clearTimeout), "active" !== l && i.wakeup(), f = +new Date, b.push(setTimeout(function () {
+                    if ("active" === l)return i.idle()
+                }, g))
+            }, d(), a(c, "mousemove", d), a(c, "keyup", d), a(c, "touchstart", d), a(window, "scroll", d), i.focus(d), i.wakeup(d)
+        }, j = function () {
+            var b;
+            return !!k || (e === !1 ? (b = "blur", h < 9 && (b = "focusout"), a(window, b, function () {
+                    return i.blur()
+                }), a(window, "focus", function () {
+                    return i.focus()
+                })) : a(c, n, function () {
+                    return c[e] ? i.blur() : i.focus()
+                }, !1), k = !0, m())
+        }, i = {
+            setIdleDuration: function (a) {
+                return g = 1e3 * a
+            }, getIdleDuration: function () {
+                return g
+            }, getIdleInfo: function () {
+                var a, b;
+                return a = +new Date, b = {}, "idle" === l ? (b.isIdle = !0, b.idleFor = a - f, b.timeLeft = 0, b.timeLeftPer = 100) : (b.isIdle = !1, b.idleFor = a - f, b.timeLeft = f + g - a, b.timeLeftPer = (100 - 100 * b.timeLeft / g).toFixed(2)), b
+            }, focus: function (a) {
+                return "function" == typeof a ? this.on("focus", a) : (l = "active", b.fire(this, "focus"), b.fire(this, "wakeup"), b.fire(this, "statusChanged", {status: l})), this
+            }, blur: function (a) {
+                return "function" == typeof a ? this.on("blur", a) : (l = "hidden", b.fire(this, "blur"), b.fire(this, "idle"), b.fire(this, "statusChanged", {status: l})), this
+            }, idle: function (a) {
+                return "function" == typeof a ? this.on("idle", a) : (l = "idle", b.fire(this, "idle"), b.fire(this, "statusChanged", {status: l})), this
+            }, wakeup: function (a) {
+                return "function" == typeof a ? this.on("wakeup", a) : (l = "active", b.fire(this, "wakeup"), b.fire(this, "statusChanged", {status: l})), this
+            }, on: function (a, c) {
+                return j(), b.add(this, a, c), this
+            }, off: function (a, c) {
+                return j(), b.remove(this, a, c), this
+            }, onEvery: function (a, b) {
+                var c, d;
+                return j(), c = !1, b && (d = setInterval(function () {
+                    if ("active" === l && c === !1)return b()
+                }, 1e3 * a)), {
+                    stop: function () {
+                        return clearInterval(d)
+                    }, pause: function () {
+                        return c = !0
+                    }, resume: function () {
+                        return c = !1
+                    }, code: d, callback: b
+                }
+            }, now: function (a) {
+                return j(), l === (a || "active")
+            }
+        }
+    })
+}).call(this);
 // Timeme.js
-(function(){!function(e,t){return"undefined"!=typeof module&&module.exports?module.exports=t(require("ifvisible.js")):"function"==typeof define&&define.amd?void define(["ifvisible"],function(i){return e.TimeMe=t(i)}):e.TimeMe=t(e.ifvisible)}(this,function(e){var t={startStopTimes:{},idleTimeout:60,currentPageName:"default-page-name",getIfVisibleHandle:function(){if("object"==typeof e)return e;throw"undefined"!=typeof console&&console.log("Required dependency (ifvisible.js) not found.  Make sure it has been included."),{name:"MissingDependencyException",message:"Required dependency (ifvisible.js) not found.  Make sure it has been included."}},startTimer:function(){var e=t.currentPageName;if(void 0===t.startStopTimes[e])t.startStopTimes[e]=[];else{var i=t.startStopTimes[e],n=i[i.length-1];if(void 0!==n&&void 0===n.stopTime)return}t.startStopTimes[e].push({startTime:new Date,stopTime:void 0})},stopTimer:function(){var e=t.currentPageName,i=t.startStopTimes[e];void 0!==i&&0!==i.length&&void 0===i[i.length-1].stopTime&&(i[i.length-1].stopTime=new Date)},getTimeOnCurrentPageInSeconds:function(){return t.getTimeOnPageInSeconds(t.currentPageName)},getTimeOnPageInSeconds:function(e){var i=0,n=t.startStopTimes[e];if(void 0!==n){for(var o=0,r=0;r<n.length;r++){var s=n[r].startTime,a=n[r].stopTime;void 0===a&&(a=new Date);var d=a-s;o+=d/1e3}return i=Number(o)}},getTimeOnAllPagesInSeconds:function(){for(var e=[],i=Object.keys(t.startStopTimes),n=0;n<i.length;n++){var o=i[n],r=t.getTimeOnPageInSeconds(o);e.push({pageName:o,timeOnPage:r})}return e},setIdleDurationInSeconds:function(e){var i=parseFloat(e);if(isNaN(i)!==!1)throw{name:"InvalidDurationException",message:"An invalid duration time ("+e+") was provided."};t.getIfVisibleHandle().setIdleDuration(i),t.idleTimeout=i},setCurrentPageName:function(e){t.currentPageName=e},resetRecordedPageTime:function(e){delete t.startStopTimes[e]},resetAllRecordedPageTimes:function(){for(var e=Object.keys(t.startStopTimes),i=0;i<e.length;i++)t.resetRecordedPageTime(e[i])},listenForVisibilityEvents:function(){t.getIfVisibleHandle().on("blur",function(){t.stopTimer()}),t.getIfVisibleHandle().on("focus",function(){t.startTimer()}),t.getIfVisibleHandle().on("idle",function(){t.idleTimeout>0&&t.stopTimer()}),t.getIfVisibleHandle().on("wakeup",function(){t.idleTimeout>0&&t.startTimer()})},initialize:function(){t.listenForVisibilityEvents(),t.startTimer()}};return t})}).call(this);
+(function () {
+    !function (e, t) {
+        return "undefined" != typeof module && module.exports ? module.exports = t(require("ifvisible.js")) : "function" == typeof define && define.amd ? void define(["ifvisible"], function (i) {
+            return e.TimeMe = t(i)
+        }) : e.TimeMe = t(e.ifvisible)
+    }(this, function (e) {
+        var t = {
+            startStopTimes: {},
+            idleTimeout: 60,
+            currentPageName: "default-page-name",
+            getIfVisibleHandle: function () {
+                if ("object" == typeof e)return e;
+                throw"undefined" != typeof console && console.log("Required dependency (ifvisible.js) not found.  Make sure it has been included."), {
+                    name: "MissingDependencyException",
+                    message: "Required dependency (ifvisible.js) not found.  Make sure it has been included."
+                }
+            },
+            startTimer: function () {
+                var e = t.currentPageName;
+                if (void 0 === t.startStopTimes[e])t.startStopTimes[e] = []; else {
+                    var i = t.startStopTimes[e], n = i[i.length - 1];
+                    if (void 0 !== n && void 0 === n.stopTime)return
+                }
+                t.startStopTimes[e].push({startTime: new Date, stopTime: void 0})
+            },
+            stopTimer: function () {
+                var e = t.currentPageName, i = t.startStopTimes[e];
+                void 0 !== i && 0 !== i.length && void 0 === i[i.length - 1].stopTime && (i[i.length - 1].stopTime = new Date)
+            },
+            getTimeOnCurrentPageInSeconds: function () {
+                return t.getTimeOnPageInSeconds(t.currentPageName)
+            },
+            getTimeOnPageInSeconds: function (e) {
+                var i = 0, n = t.startStopTimes[e];
+                if (void 0 !== n) {
+                    for (var o = 0, r = 0; r < n.length; r++) {
+                        var s = n[r].startTime, a = n[r].stopTime;
+                        void 0 === a && (a = new Date);
+                        var d = a - s;
+                        o += d / 1e3
+                    }
+                    return i = Number(o)
+                }
+            },
+            getTimeOnAllPagesInSeconds: function () {
+                for (var e = [], i = Object.keys(t.startStopTimes), n = 0; n < i.length; n++) {
+                    var o = i[n], r = t.getTimeOnPageInSeconds(o);
+                    e.push({pageName: o, timeOnPage: r})
+                }
+                return e
+            },
+            setIdleDurationInSeconds: function (e) {
+                var i = parseFloat(e);
+                if (isNaN(i) !== !1)throw{
+                    name: "InvalidDurationException",
+                    message: "An invalid duration time (" + e + ") was provided."
+                };
+                t.getIfVisibleHandle().setIdleDuration(i), t.idleTimeout = i
+            },
+            setCurrentPageName: function (e) {
+                t.currentPageName = e
+            },
+            resetRecordedPageTime: function (e) {
+                delete t.startStopTimes[e]
+            },
+            resetAllRecordedPageTimes: function () {
+                for (var e = Object.keys(t.startStopTimes), i = 0; i < e.length; i++)t.resetRecordedPageTime(e[i])
+            },
+            listenForVisibilityEvents: function () {
+                t.getIfVisibleHandle().on("blur", function () {
+                    t.stopTimer()
+                }), t.getIfVisibleHandle().on("focus", function () {
+                    t.startTimer()
+                }), t.getIfVisibleHandle().on("idle", function () {
+                    t.idleTimeout > 0 && t.stopTimer()
+                }), t.getIfVisibleHandle().on("wakeup", function () {
+                    t.idleTimeout > 0 && t.startTimer()
+                })
+            },
+            initialize: function () {
+                t.listenForVisibilityEvents(), t.startTimer()
+            }
+        };
+        return t
+    })
+}).call(this);
 
 
 var madinadSDK = {
@@ -308,8 +494,6 @@ var madinadSDK = {
 
         "_api_endpoint": "/api/campaigns/",
         "_sessions_endpoint": "/api/session/",
-        // todo: deprecated
-        // "_assets_endpoint": "https://madinad-prod.s3.amazonaws.com/campaign_assets/" // s3 bucket
     },
 
     addEventListener: function (name, callback) {
@@ -549,17 +733,17 @@ var madinadSDK = {
                 var banner = document.getElementById("madinad_banner");
                 banner.innerHTML = '<img id="madinad_banner_image" style="height: 100%;" src="' + madinadSDK.buildBannerSource(campaigns_data.url, currentCampaign) + '" />';
                 banner.onclick = function () {
-                  banner.style.display = "none";
-                  if (!document.getElementById("madinad_modal")) {
-                    madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType, true);
-                    var close_btn = document.getElementById("close_modal");
-                    close_btn.onclick = function () {
-                        document.getElementById("madinad_modal").style.display = "none";
-                        banner.style.display = "block";
-                    };
-                  } else {
-                    document.getElementById("madinad_modal").style.display = "block";
-                  }
+                    banner.style.display = "none";
+                    if (!document.getElementById("madinad_modal")) {
+                        madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType, true);
+                        var close_btn = document.getElementById("close_modal");
+                        close_btn.onclick = function () {
+                            document.getElementById("madinad_modal").style.display = "none";
+                            banner.style.display = "block";
+                        };
+                    } else {
+                        document.getElementById("madinad_modal").style.display = "block";
+                    }
                 };
                 break;
             case 7:
@@ -569,103 +753,103 @@ var madinadSDK = {
                 var inbox = document.getElementById("madinad_inbox");
                 inbox.innerHTML = '<img id="madinad_banner_image" style="height: 100%; border-radius:50%;" src="' + madinadSDK.buildInboxSource(campaigns_data.url, currentCampaign) + '" />';
                 inbox.onclick = function () {
-                  inbox.style.display = "none";
-                  if (!document.getElementById("madinad_modal")) {
-                    madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType, true);
-                    var close_btn = document.getElementById("close_modal");
-                    close_btn.onclick = function () {
-                        document.getElementById("madinad_modal").style.display = "none";
-                        inbox.style.display = "block";
-                    };
-                  } else {
-                    document.getElementById("madinad_modal").style.display = "block";
-                  }
+                    inbox.style.display = "none";
+                    if (!document.getElementById("madinad_modal")) {
+                        madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType, true);
+                        var close_btn = document.getElementById("close_modal");
+                        close_btn.onclick = function () {
+                            document.getElementById("madinad_modal").style.display = "none";
+                            inbox.style.display = "block";
+                        };
+                    } else {
+                        document.getElementById("madinad_modal").style.display = "block";
+                    }
                 };
                 break;
-             case 8:
-                 // mobile parallax
-                  clearInterval(madinadSDK.interv);
-                  madinadSDK.render_parallax(currentCampaign);
+            case 8:
+                // mobile parallax
+                clearInterval(madinadSDK.interv);
+                madinadSDK.render_parallax(currentCampaign);
                 break;
-             case 9:
-                 // in-article
-                  clearInterval(madinadSDK.interv);
-                  madinadSDK.render_inarticle(currentCampaign);
+            case 9:
+                // in-article
+                clearInterval(madinadSDK.interv);
+                madinadSDK.render_inarticle(currentCampaign);
                 break;
         }
     },
 
     render_parallax: function (campaign) {
-      var parallaxNode = document.getElementById('madinad_parallax'),
-          destinationURL = campaign.url;
+        var parallaxNode = document.getElementById('madinad_parallax'),
+            destinationURL = campaign.url;
 
-      var css = '#madinad_parallax{width:100%;height:150px;position:relative;margin-top:17px;margin-bottom:5px;margin-left:auto;margin-right:auto;border-bottom:2px solid #000000;background-color:#000000;}' +
-      '#madinad_divabs{width:100%;height:100%;position:absolute;top:0;left:0;clip:rect(auto,auto,auto,auto);}' +
-      '#madinad_destination{z-index:11;width:100%;height:100%;position:absolute;top:0;left:0;display:block;cursor:pointer;background-color:white;opacity:0;filter:alpha(opacity=0);}' +
-      '#madinad_divfix{width:398px;height:100%;position:fixed;top:0px;-moz-transform:translateZ(0);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0);margin:0 auto;}' +
-      '#madinad_image{width:100%;height:905px;border:none;position:absolute;bottom:0;left:0;-moz-transform:translateZ(0);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0); top: -89px;}' +
-      '#madinad_addiv{position:absolute;left:0;bottom:150px;width:100%;text-align:center;font-family: Arial,sans-serif;background-color:#000000;font-size:12px;color:#ffffff}',
-      head = document.head || document.getElementsByTagName('head')[0],
-      style = document.createElement('style');
+        var css = '#madinad_parallax{width:100%;height:150px;position:relative;margin-top:17px;margin-bottom:5px;margin-left:auto;margin-right:auto;border-bottom:2px solid #000000;background-color:#000000;}' +
+                '#madinad_divabs{width:100%;height:100%;position:absolute;top:0;left:0;clip:rect(auto,auto,auto,auto);}' +
+                '#madinad_destination{z-index:11;width:100%;height:100%;position:absolute;top:0;left:0;display:block;cursor:pointer;background-color:white;opacity:0;filter:alpha(opacity=0);}' +
+                '#madinad_divfix{width:398px;height:100%;position:fixed;top:0px;-moz-transform:translateZ(0);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0);margin:0 auto;}' +
+                '#madinad_image{width:100%;height:905px;border:none;position:absolute;bottom:0;left:0;-moz-transform:translateZ(0);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0); top: -89px;}' +
+                '#madinad_addiv{position:absolute;left:0;bottom:150px;width:100%;text-align:center;font-family: Arial,sans-serif;background-color:#000000;font-size:12px;color:#ffffff}',
+            head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
 
-      style.type = 'text/css';
-      if (style.styleSheet){
-        style.styleSheet.cssText = css;
-      } else {
-        style.appendChild(document.createTextNode(css));
-      }
+        style.type = 'text/css';
+        if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
 
-      head.appendChild(style);
+        head.appendChild(style);
 
-      if (parallaxNode != null) {
-          madinadSDK._remove_node('madinad_parallax');
-      }
-      parallaxNode = document.createElement('div');
-      parallaxNode.id = 'madinad_parallax';
+        if (parallaxNode != null) {
+            madinadSDK._remove_node('madinad_parallax');
+        }
+        parallaxNode = document.createElement('div');
+        parallaxNode.id = 'madinad_parallax';
 
-      parallaxNode.innerHTML = '<div id="madinad_divabs">' +
-          '<div id="madinad_divfix">' +
-              '<img id="madinad_image" src="' + campaign.image + '">' +
-          '</div>' +
-      '</div>' +
-      '<a id="madinad_destination" href="' + destinationURL + '" target="_blank"></a>' +
-      '<span id="madinad_addiv">Madinad Advertisement</span>';
+        parallaxNode.innerHTML = '<div id="madinad_divabs">' +
+            '<div id="madinad_divfix">' +
+            '<img id="madinad_image" src="' + campaign.image + '">' +
+            '</div>' +
+            '</div>' +
+            '<a id="madinad_destination" href="' + destinationURL + '" target="_blank"></a>' +
+            '<span id="madinad_addiv">Madinad Advertisement</span>';
 
-      document.body.appendChild(parallaxNode);
+        document.body.appendChild(parallaxNode);
     },
 
-    render_inarticle: function(campaign) {
-      var inarticleNode = document.getElementById('madinad_advertisement'),
-          destinationURL = campaign.url;
+    render_inarticle: function (campaign) {
+        var inarticleNode = document.getElementById('madinad_advertisement'),
+            destinationURL = campaign.url;
 
-      var css = '#madinad_advertisement { display: block; box-sizing: border-box; border: 2px solid black; }'
-      	+ '#madinad_advertisement span { display: block; color: white; text-align: center; width: 100%; background-color: black; }'
-      	+ '#madinad_advertisement a { display: block; width: 100%;}'
-      	+ '#madinad_advertisement img {width:100%;height:100%;}',
-      head = document.head || document.getElementsByTagName('head')[0],
-      style = document.createElement('style');
+        var css = '#madinad_advertisement { display: block; box-sizing: border-box; border: 2px solid black; }'
+                + '#madinad_advertisement span { display: block; color: white; text-align: center; width: 100%; background-color: black; }'
+                + '#madinad_advertisement a { display: block; width: 100%;}'
+                + '#madinad_advertisement img {width:100%;height:100%;}',
+            head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
 
-      style.type = 'text/css';
-      if (style.styleSheet){
-        style.styleSheet.cssText = css;
-      } else {
-        style.appendChild(document.createTextNode(css));
-      }
+        style.type = 'text/css';
+        if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
 
-      head.appendChild(style);
+        head.appendChild(style);
 
-      if (inarticleNode != null) {
-          madinadSDK._remove_node('madinad_advertisement');
-      }
-      inarticleNode = document.createElement('div');
-      inarticleNode.id = 'madinad_advertisement';
+        if (inarticleNode != null) {
+            madinadSDK._remove_node('madinad_advertisement');
+        }
+        inarticleNode = document.createElement('div');
+        inarticleNode.id = 'madinad_advertisement';
 
-      inarticleNode.innerHTML = '<span>Madinad Advertisement</span>'
-      	+ '<a href="' + destinationURL + '">'
-      	+	'<img src="' + campaign.image + '">'
-      	+ '</a>';
+        inarticleNode.innerHTML = '<span>Madinad Advertisement</span>'
+            + '<a href="' + destinationURL + '">'
+            + '<img src="' + campaign.image + '">'
+            + '</a>';
 
-      document.body.appendChild(inarticleNode);
+        document.body.appendChild(inarticleNode);
     },
 
     render_inbox: function (campaign) {
@@ -760,7 +944,7 @@ var madinadSDK = {
                 "cid": campaigns[i].cid
             };
             if (is_secondary) {
-              data[i]["type"] = "secondary";
+                data[i]["type"] = "secondary";
             }
         }
         var url = madinadSDK.properties._base_url + madinadSDK.properties._sessions_endpoint +
@@ -788,10 +972,9 @@ var madinadSDK = {
         document.getElementsByTagName("body")[0].appendChild(img);
     },
 
-    send_device_details: function() {
+    send_device_details: function () {
         // todo: place in here device profiling code
     },
-
 
 
     _remove_node: function (id) {
@@ -866,38 +1049,38 @@ var madinadSDK = {
     },
 
     set_user_info: function () {
-      var parser = new UAParser();
-      var device = parser.getDevice();
-      var browser = parser.getBrowser();
-      var user_location = madinadSDK.findGeo();
-      var os = parser.getOS();
-      if ((this.properties.find_position) && (typeof this.coords !== 'undefined')) {
-          // user_lat = this.coords.latitude;
-          // user_lng = this.coords.longitude;
-          user_lat = user_location["latitude"];
-          user_lng = user_location["longitude"];
-      }
-      else if ((this.properties.find_position) && (typeof this.coords === 'undefined')) {
-          user_lat = "unknown";
-          user_lng = "unknown";
-      }
-      else {
-          user_lat = "user_position/false";
-          user_lng = "user_position/false";
-      }
-      this.user_info = {
-          "app_uuid": madinadSDK.properties.app_uuid,
-          "device": (device.vendor + " " + device.model).toLowerCase(),
-          "device_type": device.type,
-          "device_os": (os.name).toLowerCase(),
-          "device_os_version": os.version,
-          "device_browser": (browser.name).toLowerCase(),
-          "screen_width": window.screen.width,
-          "screen_height": window.screen.height,
-          "redirect_url": document.referrer,
-          "latitude": user_lat,
-          "longitude": user_lng
-      }
+        var parser = new UAParser();
+        var device = parser.getDevice();
+        var browser = parser.getBrowser();
+        var user_location = madinadSDK.findGeo();
+        var os = parser.getOS();
+        if ((this.properties.find_position) && (typeof this.coords !== 'undefined')) {
+            // user_lat = this.coords.latitude;
+            // user_lng = this.coords.longitude;
+            user_lat = user_location["latitude"];
+            user_lng = user_location["longitude"];
+        }
+        else if ((this.properties.find_position) && (typeof this.coords === 'undefined')) {
+            user_lat = "unknown";
+            user_lng = "unknown";
+        }
+        else {
+            user_lat = "user_position/false";
+            user_lng = "user_position/false";
+        }
+        this.user_info = {
+            "app_uuid": madinadSDK.properties.app_uuid,
+            "device": (device.vendor + " " + device.model).toLowerCase(),
+            "device_type": device.type,
+            "device_os": (os.name).toLowerCase(),
+            "device_os_version": os.version,
+            "device_browser": (browser.name).toLowerCase(),
+            "screen_width": window.screen.width,
+            "screen_height": window.screen.height,
+            "redirect_url": document.referrer,
+            "latitude": user_lat,
+            "longitude": user_lng
+        }
     },
 
     set_cookie: function (name, value, exp_days) {
@@ -930,7 +1113,14 @@ var madinadSDK = {
 
 };
 
-if ((/iphone|ipod|android|ie|blackberry|ipad|fennec/).test(navigator.userAgent.toLowerCase())) {
+// if ((/iphone|ipod|android|ie|blackberry|ipad|fennec/).test(navigator.userAgent.toLowerCase())) {
+//     domready(function () {
+//         madinadSDK.loaded();
+//     })
+// }
+
+uaparser = UAParser();
+if (uaparser.device.type == 'mobile' || ua.device.type == 'tablet') {
     domready(function () {
         madinadSDK.loaded();
     })
