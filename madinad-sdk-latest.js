@@ -567,7 +567,7 @@ var madinadSDK = {
                 clearInterval(madinadSDK.interv);
                 madinadSDK.render_inbox(currentCampaign, campaigns_data.url);
                 var inbox = document.getElementById("madinad_inbox");
-                // banner.innerHTML = '<img id="madinad_banner_image" style="height: 100%;" src="' + madinadSDK.buildInboxSource(campaigns_data.url, currentCampaign) + '" />';
+                inbox.innerHTML = '<img id="madinad_banner_image" style="height: 100%; border-radius:50%;" src="' + madinadSDK.buildInboxSource(campaigns_data.url, currentCampaign) + '" />';
                 inbox.onclick = function () {
                   inbox.style.display = "none";
                   if (!document.getElementById("madinad_modal")) {
@@ -689,7 +689,7 @@ var madinadSDK = {
         inboxNode.style.maxWidth = '50px';
         inboxNode.style.textAlign = 'center';
         inboxNode.style.zIndex = '10000000';
-        inboxNode.style.backgroundColor = 'red';
+        inboxNode.style.backgroundColor = 'transparent';
         document.body.appendChild(inboxNode);
 
         madinadSDK.post_display_analytics(false);
