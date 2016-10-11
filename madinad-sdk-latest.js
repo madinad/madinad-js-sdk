@@ -732,9 +732,10 @@ var madinadSDK = {
             var node = document.getElementById('madinad_banner_image');
             document.body.style.marginBottom = node.height + 'px';
         });
+        madinadSDK.post_display_analytics(false);
     },
 
-    render_interstitial: function (campaign_data, base_url, campaign_type) {
+    render_interstitial: function (campaign_data, base_url, campaign_type, is_secondary) {
         var c = campaign_data;
         var modal_tmp = document.getElementById("madinad_modal");
         if (modal_tmp != null) { // if a modal exists remove it to show the other one
@@ -748,7 +749,7 @@ var madinadSDK = {
             c.auto_close_timeout
         );
 
-        madinadSDK.post_display_analytics();
+        madinadSDK.post_display_analytics(is_secondary);
     },
 
     post_display_analytics: function (is_secondary) {
