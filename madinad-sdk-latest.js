@@ -549,16 +549,16 @@ var madinadSDK = {
                 var banner = document.getElementById("madinad_banner");
                 banner.innerHTML = '<img id="madinad_banner_image" style="height: 100%;" src="' + madinadSDK.buildBannerSource(campaigns_data.url, currentCampaign) + '" />';
                 banner.onclick = function () {
-                  banner.style.visibility = "hidden";
+                  banner.style.display = "none";
                   if (!document.getElementById("madinad_modal")) {
-                    madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
+                    madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType, true);
                     var close_btn = document.getElementById("close_modal");
                     close_btn.onclick = function () {
-                        document.getElementById("madinad_modal").style.visibility = "hidden";
-                        banner.style.visibility = "visible";
+                        document.getElementById("madinad_modal").style.display = "none";
+                        banner.style.display = "block";
                     };
                   } else {
-                    document.getElementById("madinad_modal").style.visibility = "visible";
+                    document.getElementById("madinad_modal").style.display = "block";
                   }
                 };
                 break;
@@ -569,16 +569,16 @@ var madinadSDK = {
                 var inbox = document.getElementById("madinad_inbox");
                 // banner.innerHTML = '<img id="madinad_banner_image" style="height: 100%;" src="' + madinadSDK.buildInboxSource(campaigns_data.url, currentCampaign) + '" />';
                 inbox.onclick = function () {
-                  inbox.style.visibility = "hidden";
+                  inbox.style.display = "none";
                   if (!document.getElementById("madinad_modal")) {
-                    madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
+                    madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType, true);
                     var close_btn = document.getElementById("close_modal");
                     close_btn.onclick = function () {
-                        document.getElementById("madinad_modal").style.visibility = "hidden";
-                        inbox.style.visibility = "visible";
+                        document.getElementById("madinad_modal").style.display = "none";
+                        inbox.style.display = "block";
                     };
                   } else {
-                    document.getElementById("madinad_modal").style.visibility = "visible";
+                    document.getElementById("madinad_modal").style.display = "block";
                   }
                 };
                 break;
@@ -692,6 +692,7 @@ var madinadSDK = {
         inboxNode.style.backgroundColor = 'red';
         document.body.appendChild(inboxNode);
 
+        madinadSDK.post_display_analytics(false);
         // setTimeout(function () {
         //     var node = document.getElementById('madinad_banner_image');
         //     document.body.style.marginBottom = node.height + 'px';
@@ -750,14 +751,16 @@ var madinadSDK = {
         madinadSDK.post_display_analytics();
     },
 
-    post_display_analytics: function () {
+    post_display_analytics: function (is_secondary) {
         var data = [];
         var campaigns = madinadSDK.campaigns_data.c;
         for (var i = 0; i < campaigns.length; i++) {
             data[i] = {
-                "cid": campaigns[i].cid,
-                "a": "interstitial"
+                "cid": campaigns[i].cid
             };
+            if (is_secondary) {
+              data[i]["type"] = "secondary";
+            }
         }
         var url = madinadSDK.properties._base_url + madinadSDK.properties._sessions_endpoint +
             this.user_info.app_uuid + "/?data=" +
@@ -787,6 +790,8 @@ var madinadSDK = {
     send_device_details: function() {
         // todo: place in here device profiling code
     },
+
+
 
     _remove_node: function (id) {
         if (document.getElementById(id))
