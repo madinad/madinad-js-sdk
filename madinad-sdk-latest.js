@@ -823,8 +823,8 @@ var madinadSDK = {
         modal.style.left = "0px";
         modal.style.opacity = 1;
         modal.style.width = "100%";
-        // modal.style.height = "100%";
-        modal.style.height = (campaign_type == 4) ? "50%" : "100%";
+        modal.style.height = "100%";
+        // modal.style.height = (campaign_type == 4) ? "50%" : "100%";
         modal.style.maxHeight = "100%";
         modal.style.zIndex = "10000000";
         modal.style.backgroundColor = "transparent";
