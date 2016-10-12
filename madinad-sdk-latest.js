@@ -780,10 +780,10 @@ var madinadSDK = {
     },
 
     render_parallax: function (campaign) {
-        var parallaxNode = document.getElementById('madinad_parallax'),
+        var parallaxNode = document.getElementById('madinad_advertisement'),
             destinationURL = campaign.url;
 
-        var css = '#madinad_parallax{width:100%;height:150px;position:relative;margin-top:17px;margin-bottom:5px;margin-left:auto;margin-right:auto;border-bottom:2px solid #000000;background-color:#000000;}' +
+        var css = '#madinad_advertisement{width:100%;height:150px;position:relative;margin-top:17px;margin-bottom:5px;margin-left:auto;margin-right:auto;border-bottom:2px solid #000000;background-color:#000000;}' +
                 '#madinad_divabs{width:100%;height:100%;position:absolute;top:0;left:0;clip:rect(auto,auto,auto,auto);}' +
                 '#madinad_destination{z-index:11;width:100%;height:100%;position:absolute;top:0;left:0;display:block;cursor:pointer;background-color:white;opacity:0;filter:alpha(opacity=0);}' +
                 '#madinad_divfix{width:398px;height:100%;position:fixed;top:0px;-moz-transform:translateZ(0);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);-o-transform:translateZ(0);transform:translateZ(0);margin:0 auto;}' +
@@ -801,11 +801,12 @@ var madinadSDK = {
 
         head.appendChild(style);
 
-        if (parallaxNode != null) {
-            madinadSDK._remove_node('madinad_parallax');
-        }
-        parallaxNode = document.createElement('div');
-        parallaxNode.id = 'madinad_parallax';
+        // if (parallaxNode != null) {
+        //     madinadSDK._remove_node('madinad_advertisement');
+        // }
+
+        // var parallaxNode = document.getElementById('madinad_advertisement');
+        // parallaxNode.id = 'madinad_parallax';
 
         parallaxNode.innerHTML = '<div id="madinad_divabs">' +
             '<div id="madinad_divfix">' +
@@ -815,7 +816,27 @@ var madinadSDK = {
             '<a id="madinad_destination" href="' + destinationURL + '" target="_blank"></a>' +
             '<span id="madinad_addiv">Madinad Advertisement</span>';
 
-        document.body.appendChild(parallaxNode);
+
+        parallaxNode.onclick = function() {
+          madinadSDK.post_display_analytics(false, true);
+        }
+
+        window.addEventListener("scroll", check_if_visible);
+
+        function check_if_visible () {
+          if (madinadSDK.isScrolledIntoView(parallaxNode)) {
+            madinadSDK.post_display_analytics(false);
+            window.removeEventListener("scroll", check_if_visible);
+          }
+        }
+    },
+
+    isScrolledIntoView: function (el) {
+        var elemTop = el.getBoundingClientRect().top;
+        var elemBottom = el.getBoundingClientRect().bottom;
+
+        var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+        return isVisible;
     },
 
     render_inarticle: function (campaign) {
