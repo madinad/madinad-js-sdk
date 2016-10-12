@@ -816,6 +816,7 @@ var madinadSDK = {
             '<a id="madinad_destination" href="' + destinationURL + '" target="_blank"></a>' +
             '<span id="madinad_addiv">Madinad Advertisement</span>';
 
+        // document.body.appendChild(parallaxNode);
 
         parallaxNode.onclick = function() {
           madinadSDK.post_display_analytics(false, true);
@@ -859,10 +860,10 @@ var madinadSDK = {
 
         head.appendChild(style);
 
-        if (inarticleNode != null) {
-            madinadSDK._remove_node('madinad_advertisement');
-        }
-        inarticleNode = document.createElement('div');
+        // if (inarticleNode != null) {
+        //     madinadSDK._remove_node('madinad_advertisement');
+        // }
+        // inarticleNode = document.createElement('div');
         inarticleNode.id = 'madinad_advertisement';
 
         inarticleNode.innerHTML = '<span>Madinad Advertisement</span>'
@@ -870,7 +871,20 @@ var madinadSDK = {
             + '<img src="' + campaign.image + '">'
             + '</a>';
 
-        document.body.appendChild(inarticleNode);
+        // document.body.appendChild(inarticleNode);
+
+        inarticleNode.onclick = function() {
+          madinadSDK.post_display_analytics(false, true);
+        }
+
+        window.addEventListener("scroll", check_if_visible);
+
+        function check_if_visible () {
+          if (madinadSDK.isScrolledIntoView(inarticleNode)) {
+            madinadSDK.post_display_analytics(false);
+            window.removeEventListener("scroll", check_if_visible);
+          }
+        }
     },
 
     render_hp: function (campaign, base_url, auto_close) {
