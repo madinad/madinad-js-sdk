@@ -711,7 +711,7 @@ var madinadSDK = {
                 }
                 break;
             case 4: // half-page interstitial
-                madinadSDK.render_interstitial(currentCampaign, campaigns_data.url, campaignType);
+                madinadSDK.render_hp(currentCampaign, campaigns_data.url);
                 TimeMe.initialize();
                 if (madinadSDK.properties.require_fc) {
                     madinadSDK.setViewedCampaign(currentCampaign);
@@ -852,6 +852,62 @@ var madinadSDK = {
         document.body.appendChild(inarticleNode);
     },
 
+    render_hp: function (campaign, base_url, auto_close) {
+        var half_page,
+            hpNode = document.getElementById('madinad_halfpage'),
+            destinationURL = campaign.url,
+            imageSource = madinadSDK.buildBannerSource(base_url, campaign)
+            ;
+
+        if (hpNode != null) {
+            madinadSDK._remove_node('madinad_halfpage');
+        }
+
+        hpNode = document.createElement('div');
+        hpNode.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
+        '<img style="width: 100%;" src="https://madinad-prod.s3.amazonaws.com/static/img/close.png" />' +
+        '</div>' +
+        '<div style="position:relative; width:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
+        '<a href="' + destinationURL + '" target="_blank">' +
+        '<img id="madinad_banner_image" style="width: 100%;" src="' + imageSource + '" />' +
+        '</a>' +
+        '</div>';
+
+        hpNode.id = 'madinad_halfpage';
+        hpNode.style.position = 'fixed';
+        hpNode.style.bottom = '-8px';
+        hpNode.style.left = '0px';
+        hpNode.style.opacity = 1;
+        hpNode.style.width = '100%';
+        hpNode.style.maxWidth = '100%';
+        hpNode.style.textAlign = 'center';
+        hpNode.style.zIndex = '10000000';
+        hpNode.style.backgroundColor = 'transparent';
+        document.body.appendChild(hpNode);
+
+        document.getElementById("madinad_banner_image").onclick = function() {
+          madinadSDK.post_display_analytics(false, true);
+        }
+
+        // setTimeout(function () {
+        //     var node = document.getElementById('madinad_banner_image');
+        //     document.body.style.marginBottom = '-' + node.height + 'px';
+        // });
+        madinadSDK.post_display_analytics(false);
+
+        var close_btn = document.getElementById("close_modal");
+        if (auto_close) {
+            var time_in_mil = auto_close * 1000;
+            setTimeout(function () {   //calls click event after a certain time
+                hpNode.remove();
+            }, time_in_mil);
+        }
+        close_btn.onclick = function () {
+            this.parentNode.parentNode.removeChild(hpNode);
+            madinadSDK.fireEvent(madinadSDK.EVENTS.interstitialClosed);
+        };
+    },
+
     render_inbox: function (campaign) {
         var inbox,
             inboxNode = document.getElementById('madinad_inbox'),
@@ -912,10 +968,15 @@ var madinadSDK = {
         bannerNode.style.backgroundColor = 'rgba(211, 211, 211, 0.8)';
         document.body.appendChild(bannerNode);
 
+        bannerNode.onclick = function() {
+          madinadSDK.post_display_analytics(false, true);
+        }
+
         setTimeout(function () {
             var node = document.getElementById('madinad_banner_image');
             document.body.style.marginBottom = node.height + 'px';
         });
+
         madinadSDK.post_display_analytics(false);
     },
 
@@ -936,21 +997,28 @@ var madinadSDK = {
         madinadSDK.post_display_analytics(is_secondary);
     },
 
-    post_display_analytics: function (is_secondary) {
+    post_display_analytics: function (is_secondary, is_click) {
         var data = [];
         var campaigns = madinadSDK.campaigns_data.c;
-        for (var i = 0; i < campaigns.length; i++) {
-            data[i] = {
-                "cid": campaigns[i].cid
-            };
-            if (is_secondary) {
-                data[i]["type"] = "secondary";
-            }
+        if (!is_click) { // If event is not click
+          for (var i = 0; i < campaigns.length; i++) {
+              data[i] = {
+                  "cid": campaigns[i].cid
+              };
+              if (is_secondary) {
+                  data[i]["type"] = "secondary";
+              }
+          }
+          var url = madinadSDK.properties._base_url + madinadSDK.properties._sessions_endpoint +
+              this.user_info.app_uuid + "/?data=" +
+              encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
+          madinadSDK.jsonp(url);
+        } else { // If event is banner/inbox/hp click
+          var c = madinadSDK.getCampaign(madinadSDK.campaigns_data.c);
+          var url = madinadSDK.properties._base_url + madinadSDK.properties._sessions_endpoint +
+              this.user_info.app_uuid + "/?e=click" + "&app_uuid=" + this.user_info.app_uuid + "&campaign=" + c.cid;
+          madinadSDK.jsonp(url);
         }
-        var url = madinadSDK.properties._base_url + madinadSDK.properties._sessions_endpoint +
-            this.user_info.app_uuid + "/?data=" +
-            encodeURI(JSON.stringify(data)) + '&callback=madinadSDK.analytics_callback';
-        madinadSDK.jsonp(url);
     },
 
     jsonObjToParams: function (json) {
@@ -1119,8 +1187,9 @@ var madinadSDK = {
 //     })
 // }
 
-uaparser = UAParser();
-if (uaparser.device.type == 'mobile' || ua.device.type == 'tablet') {
+var uaparser = new UAParser();
+var ua_device = uaparser.getDevice();
+if (ua_device.type == 'mobile' || ua_device.type == 'tablet') {
     domready(function () {
         madinadSDK.loaded();
     })
