@@ -894,17 +894,35 @@ var madinadSDK = {
             imageSource = madinadSDK.buildBannerSource(base_url, campaign)
             ;
 
+        var css = '@media all and (orientation: landscape) {'
+                + '#close_modal {position: fixed !important;}'
+                + '#madinad_banner_image {width: 70% !important;}'
+                + '#madinad_solid_bg {background: #000 !important; position: fixed !important; top: 0 !important; bottom: 0 !important; left: 0 !important; right: 0 !important;}'
+                + '#madinad_heading {text-align: center !important;}'
+                + '}',
+            head = document.head || document.getElementsByTagName('head')[0],
+            style = document.createElement('style');
+
+        style.type = 'text/css';
+        if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+        head.appendChild(style);
+
         if (hpNode != null) {
             madinadSDK._remove_node('madinad_halfpage');
         }
 
         hpNode = document.createElement('div');
         hpNode.innerHTML = '<div id="close_modal" style="min-width: 10%; min-height: 10%; z-index:1000; position:absolute; top:0; right:0; cursor:pointer;">' +
-        '<img style="width: 100%;" src="https://madinad-prod.s3.amazonaws.com/static/img/close.png" />' +
+        '<img style="position:absolute; top:0; right:0;" src="https://madinad-prod.s3.amazonaws.com/static/img/close.png" />' +
         '</div>' +
+        '<div id="madinad_solid_bg"></div>' +
         '<div style="position:relative; width:100%; margin-left:auto; margin-right:auto; overflow:auto; -webkit-overflow-scrolling:touch;">' +
         '<a href="' + destinationURL + '" target="_blank">' +
-        '<img id="madinad_banner_image" style="width: 100%;" src="' + imageSource + '" />' +
+        '<h1 id="madinad_heading" style="margin: 0;"><img id="madinad_banner_image" style="width: 100%;" src="' + imageSource + '" /></h1>' +
         '</a>' +
         '</div>';
 
