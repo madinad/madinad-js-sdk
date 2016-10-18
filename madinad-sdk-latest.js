@@ -236,3 +236,11 @@ if ((/iphone|ipod|android|ie|blackberry|ipad|fennec/).test(navigator.userAgent.t
         madinadSDK.loaded();
     })
 }
+
+// var uaparser = new UAParser();
+// var ua_device = uaparser.getDevice();
+// if (ua_device.type == 'mobile' || ua_device.type == 'tablet') {
+//     domready(function () {
+//         madinadSDK.loaded();
+//     })
+// }
